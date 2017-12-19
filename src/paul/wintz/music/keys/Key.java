@@ -29,7 +29,7 @@ public class Key  {
 		this.mode = mode;
 	}
 
-	public AbsoluteChord convertRomanNumeralToAbsoluteChord(RomanNumeralChord romanNumeral){
+	public AbsoluteChord absoluteChordFromRomanNumeral(RomanNumeralChord romanNumeral){
 		PitchClass root = this.getTonic().addHalfsteps(romanNumeral.getHalfStepsAboveTonic());
 
 		return new AbsoluteChord(root, romanNumeral.quality);
@@ -41,16 +41,16 @@ public class Key  {
 	 * @return
 	 * Returns null if no Roman numeral is found
 	 */
-	public RomanNumeralChord convertAbsoluteChordToRomanNumeral(AbsoluteChord chord){
+	public RomanNumeralChord romanNumeralFromAbsoluteChord(AbsoluteChord chord){
 		int halfStepsAboveTonic = PitchClass.getDifferneceInHalfSteps(tonic, chord.getRoot());
 		if(halfStepsAboveTonic < 0) {
 			halfStepsAboveTonic += 12;
 		}
-		return RomanNumeralChord.getRomanNumeral(this.mode, halfStepsAboveTonic, chord.quality);
+		return RomanNumeralChord.makeRomanNumeral(this.mode, halfStepsAboveTonic, chord.quality);
 	}
 
 	public boolean containsChord(AbsoluteChord chord){
-		return (convertAbsoluteChordToRomanNumeral(chord) != null);
+		return (romanNumeralFromAbsoluteChord(chord) != null);
 	}
 
 	public static Key getKey(PitchClass tonic, Mode mode){

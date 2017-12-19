@@ -14,7 +14,7 @@ public class RomanNumeralPossibilitiesMain {
 		AbsoluteChord chord = new AbsoluteChord(PitchClass.Ab, ChordQuality.MAJOR_TRIAD);
 		List<AbsoluteRomanNumeralChord> allPossible = chord.getAllPossibleRomanNumerals();
 		for(AbsoluteRomanNumeralChord rn : allPossible){
-			out.println(rn.getKey().toString() + ": " + rn.getRomanNumeral().toString());
+			out.println(rn.getKey() + ": " + rn.getRomanNumeral());
 		}
 	}
 

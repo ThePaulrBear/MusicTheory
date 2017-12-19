@@ -5,7 +5,6 @@ import java.util.*;
 
 import javax.sound.midi.*;
 
-import paul.wintz.music.*;
 import paul.wintz.music.chords.Progression;
 import paul.wintz.music.notes.PitchClass;
 
@@ -27,97 +26,123 @@ public class MidiAnalyzerMain {
 	private static String songFile = AVE_MARIA_BACH;
 	private static int millisPerFrame = 25;
 
-	private static Synthesizer synth;
-
-	private static List<PitchClass> notes = new ArrayList<>();
-	private static List<Integer> volumes = new ArrayList<>();
 
 	public static void main(String[] args) throws Exception {
+		new Thread(new MidiChordAnalyzer(new File(songFile))).start();
+	}
 
-		Sequencer sequencer = setupSequencer();
-		Progression progression = new Progression();
 
-		while(sequencer.isRunning()){
-			Thread.sleep(millisPerFrame);
-			notes.clear();
-			volumes.clear();
+	static class MidiChordAnalyzer implements Runnable {
 
-			readNotesAndVolumes();
+		private Synthesizer synth;
 
-			progression.add(notes);
+		private final List<PitchClass> notes = new ArrayList<>();
+		private final List<Integer> volumes = new ArrayList<>();
 
-			//Determine the key
+		private final File file;
+
+		public MidiChordAnalyzer(File f) throws Exception {
+			this.file = f;
 		}
 
-		sequencer.close();
-		synth.close();
-	}
+		private Sequencer setupSequencer() throws MidiUnavailableException, InvalidMidiDataException, IOException {
+			synth = MidiSystem.getSynthesizer();
+			synth.getDefaultSoundbank();
+			synth.open();
 
+			Sequencer sequencer = MidiSystem.getSequencer();
+			sequencer.open();
 
-	private static Sequencer setupSequencer() throws MidiUnavailableException, InvalidMidiDataException, IOException {
-		synth = MidiSystem.getSynthesizer();
-		synth.getDefaultSoundbank();
-		synth.open();
+			Receiver receiver = synth.getReceiver();
 
-		Sequencer sequencer = MidiSystem.getSequencer();
-		sequencer.open();
+			Sequence sequence = MidiSystem.getSequence(file);
+			sequencer.setSequence(sequence);
 
-		Receiver receiver = synth.getReceiver();
+			Transmitter transmitter = sequencer.getTransmitter();
+			transmitter.setReceiver(receiver);
 
-		Sequence sequence = MidiSystem.getSequence(new File(songFile));
-		sequencer.setSequence(sequence);
+			sequencer.start();
+			return sequencer;
+		}
 
-		Transmitter transmitter = sequencer.getTransmitter();
-		transmitter.setReceiver(receiver);
+		@Override
+		public void run() {
+			try {
 
-		sequencer.start();
-		return sequencer;
-	}
+				Sequencer sequencer = setupSequencer();
+				Progression progression = new Progression();
 
+				while(sequencer.isRunning()){
+					Thread.sleep(millisPerFrame);
+					notes.clear();
+					volumes.clear();
 
-	/**
-	 *
-	 */
-	private static void readNotesAndVolumes() {
-		for(VoiceStatus voice: synth.getVoiceStatus()){
-			if(voice.active && !isPercussion(voice)) {
+					readNotesAndVolumes();
 
-				PitchClass currentNote = PitchClass.getFromMidiNumber(voice.note);
-				int currentIndex = notes.lastIndexOf(currentNote);
-				if(currentIndex != -1){
-					if(voice.volume > volumes.get(currentIndex)){
-						volumes.remove(currentIndex);
-						notes.remove(currentIndex);
-					} else {
-						continue;
-					}
+					progression.add(notes);
 				}
 
-				int indexToInsert = 0;
-				for(int i = notes.size() - 1; i >= 0; i--){
+				sequencer.close();
+				synth.close();
 
-					//check each element, starting at the end, of volumes. When the value checked is greater than the
-					// current value, add a new  element after it.
-					if(volumes.get(i) > voice.volume) {
-						indexToInsert = i + 1;
-						break;
+			} catch (MidiUnavailableException | InvalidMidiDataException | IOException | InterruptedException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+		private void readNotesAndVolumes() {
+			for(VoiceStatus voice: synth.getVoiceStatus()){
+				if(voice.active && !isPercussion(voice)) {
+
+					PitchClass currentNote = PitchClass.getFromMidiNumber(voice.note);
+					int currentIndex = notes.lastIndexOf(currentNote);
+					if(currentIndex != -1){
+						if(voice.volume > volumes.get(currentIndex)){
+							volumes.remove(currentIndex);
+							notes.remove(currentIndex);
+						} else {
+							continue;
+						}
 					}
-				}
-				volumes.add(indexToInsert, voice.volume);
-				notes.add(indexToInsert, PitchClass.getFromMidiNumber(voice.note));
 
+					int indexToInsert = indexToInsert(voice);
+					volumes.add(indexToInsert, voice.volume);
+					notes.add(indexToInsert, PitchClass.getFromMidiNumber(voice.note));
+
+				}
 			}
 		}
+
+		private int indexToInsert(VoiceStatus voice) {
+			int indexToInsert = 0;
+			for(int i = notes.size() - 1; i >= 0; i--){
+
+				//check each element, starting at the end, of volumes. When the value checked is greater than the
+				// current value, add a new  element after it.
+				if(volumes.get(i) > voice.volume) {
+					indexToInsert = i + 1;
+					break;
+				}
+			}
+			return indexToInsert;
+		}
+
+		/**Checks if the current voice is in the channel (usually?) reserved for percussion.
+		 *
+		 * @param voice
+		 * @return
+		 */
+		private static boolean isPercussion(VoiceStatus voice) {
+			return voice.channel == 9;
+		}
+
+
 	}
 
-	/**Checks if the current voice is in the channel (usually?) reserved for percussion.
-	 *
-	 * @param voice
-	 * @return
-	 */
-	private static boolean isPercussion(VoiceStatus voice) {
-		return voice.channel == 9;
-	}
+
+
+
 
 
 }

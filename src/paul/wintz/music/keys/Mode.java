@@ -71,14 +71,14 @@ public enum Mode {
 		return matchingChords;
 	}
 
-	public List<Note> getNotes(Note tonic){
-		List<Note>  notes = new ArrayList<>();
+	public List<NoteClass> getNotes(NoteClass tonic){
+		List<NoteClass>  noteClass = new ArrayList<>();
 
 		for(SolfegeEnum slfg : getSolfege()){
-			notes.add(slfg.toNote(tonic));
+			noteClass.add(slfg.toNote(tonic));
 		}
 
-		return notes;
+		return noteClass;
 	}
 
 	public RomanNumeralChord[] getRelativeChords() {
@@ -89,10 +89,10 @@ public enum Mode {
 		return solfegeEnum;
 	}
 
-	public String notesToString(Note tonic){
+	public String notesToString(NoteClass tonic){
 		StringBuilder sb = new StringBuilder();
-		for(Note note : getNotes(tonic)){
-			sb.append(note.getName()).append(" ");
+		for(NoteClass noteClass : getNotes(tonic)){
+			sb.append(noteClass.getName()).append(" ");
 		}
 		return sb.toString();
 	}

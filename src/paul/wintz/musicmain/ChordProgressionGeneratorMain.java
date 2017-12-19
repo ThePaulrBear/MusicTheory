@@ -6,7 +6,6 @@ import java.util.*;
 
 import javax.sound.midi.*;
 
-import paul.wintz.music.*;
 import paul.wintz.music.chords.*;
 import paul.wintz.music.keys.*;
 import paul.wintz.music.notes.PitchClass;
@@ -14,53 +13,26 @@ import paul.wintz.music.notes.PitchClass;
 public class ChordProgressionGeneratorMain {
 	private static Random random = new Random();
 
-	//converts midi data into paul.wintz.audio
-	private static Synthesizer synth;
-
 	//A collection of up to 128 banks. Each bank holds up to 128 instruments.
 	private static Soundbank soundBank;
 
-	//CLASSES
-	//Specifies a bank and instrument. Used to change a channel's instrument.
-	private static Patch patch;
-
-	//Instrument
-	private static Instrument instrument;
-	//String getName()
-
-	//Used to communicate to synthesizer in real time wth messages:
+	//Used to communicate to synthesizer in real time with messages:
 	private static Receiver synthRcvr;
 
 	//Used to communicate directly to synth.
 	private static MidiChannel chan[];
 
-	/* The goal of this class is to take a chord a play it through the speakers
-	 */
-	public static void main(String[] args) throws MidiUnavailableException, InvalidMidiDataException, InterruptedException, NullPointerException {
+	public static void main(String[] args) throws MidiUnavailableException, InterruptedException {
 
-		synth = MidiSystem.getSynthesizer();
-		synth.open();
-		synthRcvr = synth.getReceiver();
-		soundBank = synth.getDefaultSoundbank();
-		chan = synth.getChannels();
+		//converts midi data into paul.wintz.audio
+		try(Synthesizer synth = MidiSystem.getSynthesizer()){
+			synth.open();
+			synthRcvr = synth.getReceiver();
+			soundBank = synth.getDefaultSoundbank();
+			chan = synth.getChannels();
 
-		for(Instrument inst : synth.getLoadedInstruments()){
-			out.println(inst.getName());
+			produceProgression();
 		}
-
-
-		//		for(PitchClass root : PitchClass.values()){
-		//			for(ChordQuality qual : ChordQuality.values()){
-		//				AbsoluteChord chord = new AbsoluteChord(root, qual);
-		for(AbsoluteChord chord : produceProgression()){
-			System.out.println(chord.toString());
-			playChord(chord);
-			Thread.sleep(1000);
-			stopNotes();
-			Thread.sleep(300);
-		}
-		//			}
-		//		}
 
 	}
 
@@ -100,25 +72,22 @@ public class ChordProgressionGeneratorMain {
 	}
 
 	private static void selectInstrument(int bank, int program) {
-		patch = new Patch(bank, program);
-		instrument = soundBank.getInstrument(patch);
+		//Specifies a bank and instrument. Used to change a channel's instrument.
+		Patch patch = new Patch(bank, program);
+		Instrument instrument = soundBank.getInstrument(patch);
 		out.println("instrument:  " + instrument.getName());
 	}
 
-	//TODO: move this somewhere it makes sense
-	public static List<AbsoluteChord> produceProgression() {
-		List<AbsoluteChord> progression = new ArrayList<>();
-
+	public static void produceProgression() throws InterruptedException {
 		String progressionString = "\n";
 		Key key = Key.getKey(PitchClass.C, Mode.MAJOR);
-		RomanNumeralChord romanNumeral = RomanNumeralChord.getRomanNumeral(Mode.MAJOR, 0, ChordQuality.MAJOR_TRIAD);
-		AbsoluteChord absoluteChord = key.convertRomanNumeralToAbsoluteChord(romanNumeral);
-		progression.add(absoluteChord);
+		RomanNumeralChord romanNumeral = RomanNumeralChord.makeRomanNumeral(Mode.MAJOR, 0, ChordQuality.MAJOR_TRIAD);
+		AbsoluteChord absoluteChord = key.absoluteChordFromRomanNumeral(romanNumeral);
+
 		List<RomanNumeralChord> matchingChords = new ArrayList<>();
 		List<Key> matchingKeys = new ArrayList<>();
 		progressionString += key.toString() + ": ";
 		for(int i = 0; i < 50; i++){
-			//			for(RomanNumeralChord romanNumeral : RomanNumeralChord.getAllRomanNumerals().values()){
 
 			matchingChords.clear();
 			matchingKeys.clear();
@@ -127,7 +96,7 @@ public class ChordProgressionGeneratorMain {
 			//String format: [I | C MAJOR: IV]
 			for(Key keyToCheck: Key.getAllKeys()){
 
-				RomanNumeralChord matchedChord = keyToCheck.convertAbsoluteChordToRomanNumeral(absoluteChord);
+				RomanNumeralChord matchedChord = keyToCheck.romanNumeralFromAbsoluteChord(absoluteChord);
 				if(matchedChord == null) {
 					continue;
 				}
@@ -153,13 +122,17 @@ public class ChordProgressionGeneratorMain {
 				} catch(NullPointerException e){
 					continue;
 				}
-				absoluteChord = key.convertRomanNumeralToAbsoluteChord(romanNumeral);
-				progression.add(absoluteChord);
+				absoluteChord = key.absoluteChordFromRomanNumeral(romanNumeral);
 				progressionString += "\t " + romanNumeral.toString() + " (" + absoluteChord.toString() + ")\n";
+
+				playChord(absoluteChord);
+				Thread.sleep(1000);
+				stopNotes();
+				Thread.sleep(300);
+				System.out.print(progressionString);
 			}
+
 		}
-		System.out.println(progressionString);
-		return progression;
 	}
 
 

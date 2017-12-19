@@ -12,11 +12,11 @@ public class RomanNumeralChord extends Chord {
 	private List<RomanNumeralChord> possibleNextChords;
 
 	private final String romanNumeral;
-	private static final HashMap<String, RomanNumeralChord> allRomanNumerals = new HashMap<>();
+	private static final Map<String, RomanNumeralChord> allRomanNumerals = new HashMap<>();
 
 	private static Random random = new Random();
 
-	RomanNumeralChord(SolfegeEnum rootSolfege, ChordQuality quality, Type romanNumeralType, String romanNumeral){
+	public RomanNumeralChord(SolfegeEnum rootSolfege, ChordQuality quality, Type romanNumeralType, String romanNumeral){
 		this.rootSolfege = rootSolfege;
 		this.quality = quality;
 		this.romanNumeral = romanNumeral;
@@ -185,7 +185,6 @@ public class RomanNumeralChord extends Chord {
 				allRomanNumerals.put(getHashCodeKey("MINOR", chord), chord);
 			}
 		}
-
 	}
 
 	public static Map<String, RomanNumeralChord> getAllRomanNumerals() {
@@ -200,7 +199,7 @@ public class RomanNumeralChord extends Chord {
 	}
 
 	//Returns null if no Roman numeral is found
-	public static RomanNumeralChord getRomanNumeral(Mode mode, int halfStepsAboveTonic, ChordQuality quality){
+	public static RomanNumeralChord makeRomanNumeral(Mode mode, int halfStepsAboveTonic, ChordQuality quality){
 		return allRomanNumerals.get(getHashCodeKey(mode, halfStepsAboveTonic, quality));
 	}
 
@@ -211,9 +210,5 @@ public class RomanNumeralChord extends Chord {
 	public void setRomanNumeralType(Type romanNumeralType) {
 		this.romanNumeralType = romanNumeralType;
 	}
-
-
-
-
 
 }

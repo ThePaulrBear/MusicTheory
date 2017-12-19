@@ -6,8 +6,8 @@ import static org.junit.Assert.*;
 import paul.wintz.music.*;
 import paul.wintz.music.chords.AbsoluteChord;
 import paul.wintz.music.intervals.IntervalEnum;
-import paul.wintz.music.notes.Note;
-import paul.wintz.music.notes.Note.*;
+import paul.wintz.music.notes.*;
+import paul.wintz.music.notes.NoteClass.*;
 
 import org.junit.*;
 
@@ -26,29 +26,29 @@ public class NoteNameTest {
 
 	@Test
 	public void testNoteName() throws Exception {
-		Note name = new Note(Base.D, Accidental.SHARP);
+		NoteClass name = new NoteClass(NaturalPitchClass.D, Accidental.SHARP);
 		assertEquals("Names don't match", name.getName(), "D" + UnicodSymbol.SHARP);
 	}
 	
 	@Test
 	public void testGetNoteAtInterval() throws Exception {
 		for(IntervalEnum intervalEnum : IntervalEnum.values()){
-			for(Base base : Base.values()){
+			for(NaturalPitchClass naturalPitchClass : NaturalPitchClass.values()){
 				for(Accidental acc : Accidental.values()){
-					Note note = new Note(base, acc);
-					Note second = Note.getNoteAtInterval(note, intervalEnum);
+					NoteClass noteClass = new NoteClass(naturalPitchClass, acc);
+					NoteClass second = NoteClass.getNoteAtInterval(noteClass, intervalEnum);
 					
-					String errorMsg = "Note: " + note.getName() +
+					String errorMsg = "NoteClass: " + noteClass.getName() +
 							"\nInterval: " + intervalEnum.name() +
 							"\nSecond note: " + second.getName()
 							;
 								
-					assertEquals("Wrong note number.\n" + errorMsg, (note.getNoteNumber() + intervalEnum.getHalfSteps()) % 12, second.getNoteNumber());
+					assertEquals("Wrong note number.\n" + errorMsg, (noteClass.getNoteNumber() + intervalEnum.getHalfSteps()) % 12, second.getNoteNumber());
 					
 					if(second.isDefaultName()){
 						out.println("Invalid note, reverted to default note for pitch class\n" + errorMsg);
 					} else {
-						assertEquals("Wrong base.\n" + errorMsg, (note.getBase().ordinal() + intervalEnum.getScaleSteps()) % Base.values().length, second.getBase().ordinal());
+						assertEquals("Wrong base.\n" + errorMsg, (noteClass.getBase().ordinal() + intervalEnum.getScaleSteps()) % NaturalPitchClass.values().length, second.getBase().ordinal());
 					}
 				}
 			}

@@ -1,7 +1,7 @@
 package paul.wintz.music.keys;
 
 import paul.wintz.music.intervals.IntervalEnum;
-import paul.wintz.music.notes.Note;
+import paul.wintz.music.notes.NoteClass;
 
 public enum SolfegeEnum {
 	DO (0, ScaleDegree.TONIC, 		IntervalEnum.UNISON),
@@ -40,8 +40,8 @@ public enum SolfegeEnum {
 		return halfstepsAboveTonic;
 	}
 
-	public Note toNote(Note tonic){
-		return Note.getNoteAtInterval(tonic, intervalAboveTonic);
+	public NoteClass toNote(NoteClass tonic){
+		return NoteClass.getNoteAtInterval(tonic, intervalAboveTonic);
 	}
 
 	@SuppressWarnings("incomplete-switch")

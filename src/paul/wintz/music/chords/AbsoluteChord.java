@@ -1,10 +1,12 @@
 package paul.wintz.music.chords;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static java.lang.System.out;
 
 import java.util.*;
 
-import paul.wintz.music.*;
+import com.google.common.base.Preconditions;
+
 import paul.wintz.music.intervals.IntervalEnum;
 import paul.wintz.music.keys.Key;
 import paul.wintz.music.notes.PitchClass;
@@ -27,11 +29,8 @@ public class AbsoluteChord extends Chord {
 	 * 	!notes.isEmpty()
 	 * @throws IllegalArgumentException
 	 */
-	public AbsoluteChord(List<PitchClass> notes) throws IllegalArgumentException {
-		if(notes.isEmpty()) {
-			this.quality = ChordQuality.INVALID;
-			throw new IllegalArgumentException("Notes array was empty");
-		}
+	public AbsoluteChord(List<PitchClass> notes) {
+		checkArgument(!notes.isEmpty(), "Notes array was empty");
 
 		this.notes = notes;
 		removeDuplicates(notes);
@@ -68,15 +67,12 @@ public class AbsoluteChord extends Chord {
 		}
 	}
 
-	/**
-	 *
-	 */
 	private void printDiagnosticInfo() {
 		out.println("--------------\n"
 				+ "Notes: " + pitchClassesToString()
 				+ "\nIntervals");
 		for(IntervalEnum inter : intervalEnums){
-			out.print(inter.toString() + " ");
+			out.print(inter + " ");
 		}
 
 		out.println("\nChord Quality : " + quality.toString());
@@ -88,7 +84,7 @@ public class AbsoluteChord extends Chord {
 	 * 	!notes.isEmpty()
 	 * @throws IllegalArgumentException
 	 */
-	/*public AbsoluteChord(PitchClass... notes) throws IllegalArgumentException {
+	/*public AbsoluteChord(PitchClass... notes) {
 		if(notes.length == 0) throw new IllegalArgumentException("Chord cannot be constructed. Notes array was empty.");
 
 		for(PitchClass note : notes){
@@ -171,7 +167,7 @@ public class AbsoluteChord extends Chord {
 
 			for (int j = i+1; j < notes.size(); j++) {
 				//If note is already in the array, remove it.
-				assert i != j : "Note was checked against itself";
+				Preconditions.checkState(i != j, "NoteClass was checked against itself");
 				if (notes.get(i).ordinal() == notes.get(j).ordinal()) {
 					notes.remove(j);
 					j--;
@@ -202,7 +198,7 @@ public class AbsoluteChord extends Chord {
 
 	public void printNotes() {
 		for(int i = 0; i < notes.size(); i++){
-			System.out.print(notes.get(i).toString() + " ");
+			System.out.print(notes.get(i) + " ");
 		}
 	}
 
@@ -214,19 +210,9 @@ public class AbsoluteChord extends Chord {
 	}
 
 	public static void test() {
-		Random random = new Random();
-
-		PitchClass value;
-
-		int n = 0;
 
 		for (int j = 0; j < 1; j++) {
 			List<PitchClass> notes = new ArrayList<>();
-			//			for (int i = 0; i < 4; i++){
-			//				n += 3 + random.nextInt(7) ;
-			//				value = PitchClass.values()[n % 12];
-			//				notes.add(value);
-			//			}
 
 			notes.add(PitchClass.C);
 			notes.add(PitchClass.E);
@@ -235,9 +221,7 @@ public class AbsoluteChord extends Chord {
 			AbsoluteChord chord = new AbsoluteChord(notes);
 
 			if(chord.quality.isValid()) {
-				System.out.println("\n");
-
-				System.out.print(chord.toString() + ": ");
+				System.out.print("\n" + chord.toString() + ": ");
 				chord.printNotes();
 			}
 		}
@@ -267,7 +251,6 @@ public class AbsoluteChord extends Chord {
 		return root.name() + quality.getSufix();
 	}
 
-	//GETTERS
 	public PitchClass getRoot() {
 		return root;
 	}
@@ -285,14 +268,12 @@ public class AbsoluteChord extends Chord {
 	}
 
 	public String pitchClassesToString(){
-		String s = "";
-
+		StringBuilder sb = new StringBuilder();
 		for(PitchClass note : notes){
-			s += " " + note.name();
+			sb.append(" ").append(note.name());
 		}
-		return s;
+		return sb.toString();
 	}
-
 
 	@Override
 	public String toString(){
@@ -310,7 +291,7 @@ public class AbsoluteChord extends Chord {
 		//For each key
 		for(Key key : keysToCheck){
 			//Find the matching Roman numeral.
-			RomanNumeralChord romanNumeral = key.convertAbsoluteChordToRomanNumeral(this);
+			RomanNumeralChord romanNumeral = key.romanNumeralFromAbsoluteChord(this);
 
 			//If chord is not contained in key, continue.
 			if(romanNumeral == null) {
@@ -331,8 +312,8 @@ public class AbsoluteChord extends Chord {
 	 * @param keysToCheck
 	 * @return
 	 */
-	public ArrayList<Key> getContainingKeys(ArrayList<Key> keysToCheck){
-		ArrayList<Key> containingKey = new ArrayList<>();
+	public List<Key> getContainingKeys(List<Key> keysToCheck){
+		List<Key> containingKey = new ArrayList<>();
 
 		//For each key
 		for(Key key : keysToCheck){
@@ -350,12 +331,11 @@ public class AbsoluteChord extends Chord {
 	@Override
 	public boolean equals(Object obj) {
 
-		if(!(obj instanceof AbsoluteChord)) return false;
+		if(!(obj instanceof AbsoluteChord))
+			return false;
+
 		AbsoluteChord other = (AbsoluteChord) obj;
 
-		if(this.quality == other.quality &&
-				this.root == other.root) return true;
-		else
-			return false;
+		return this.quality == other.quality && this.root == other.root;
 	}
 }
