@@ -22,7 +22,6 @@ public enum ChordQuality {
 	HALF_DIMINISHED_SEVENTH (UnicodSymbol.HALF_DIMINISHED + "7", IntervalEnum.MINOR_THIRD, IntervalEnum.TRITONE, IntervalEnum.MINOR_SEVENTH),
 	INVALID ("?");
 
-
 	private final IntervalEnum[] intervalEnums;
 	//	final private IntervalEnum third;
 	//	final private IntervalEnum fifth;

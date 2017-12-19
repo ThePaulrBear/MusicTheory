@@ -7,7 +7,7 @@ import paul.wintz.music.notes.*;
 
 public enum Mode {
 	MAJOR (
-			RomanNumeralChord.Major.MAJOR,
+			RomanNumeral.Major.MAJOR,
 			SolfegeEnum.DO,
 			SolfegeEnum.RE,
 			SolfegeEnum.MI,
@@ -17,7 +17,7 @@ public enum Mode {
 			SolfegeEnum.TI
 			),
 	MINOR (
-			RomanNumeralChord.Minor.MINOR,
+			RomanNumeral.Minor.MINOR,
 			SolfegeEnum.DO,
 			SolfegeEnum.RE,
 			SolfegeEnum.MI,
@@ -27,14 +27,14 @@ public enum Mode {
 			SolfegeEnum.TE);
 
 	private final SolfegeEnum[] solfegeEnum;
-	private final RomanNumeralChord[] relativeChords;
+	private final RomanNumeral[] relativeChords;
 
-	Mode (RomanNumeralChord[] diatonicQualities, SolfegeEnum... solfege){
+	Mode (RomanNumeral[] diatonicQualities, SolfegeEnum... solfege){
 		this.solfegeEnum = solfege;
 		this.relativeChords = diatonicQualities;
 	}
 
-	RomanNumeralChord getDiatonicChordQuality(ScaleDegree deg){
+	RomanNumeral getDiatonicChordQuality(ScaleDegree deg){
 		return relativeChords[deg.ordinal()];
 	}
 
@@ -46,8 +46,8 @@ public enum Mode {
 
 	//Calculations
 	//Check each
-	ArrayList<RomanNumeralChord> getMatchingRelativeChords(PitchClass tonic, AbsoluteChord chordToMatch){
-		ArrayList<RomanNumeralChord> matchingChords = new ArrayList<>();
+	ArrayList<RomanNumeral> getMatchingRelativeChords(PitchClass tonic, AbsoluteChord chordToMatch){
+		ArrayList<RomanNumeral> matchingChords = new ArrayList<>();
 
 		int targetHalfStepsAboveTonic = PitchClass.getDifferneceInHalfSteps(tonic, chordToMatch.getRoot());
 
@@ -55,7 +55,7 @@ public enum Mode {
 			targetHalfStepsAboveTonic += 12;
 		}
 
-		for(RomanNumeralChord chordToCheck : relativeChords){
+		for(RomanNumeral chordToCheck : relativeChords){
 			if(targetHalfStepsAboveTonic != chordToCheck.getHalfStepsAboveTonic()) {
 				continue;
 			}
@@ -81,7 +81,7 @@ public enum Mode {
 		return noteClass;
 	}
 
-	public RomanNumeralChord[] getRelativeChords() {
+	public RomanNumeral[] getRelativeChords() {
 		return relativeChords;
 	}
 

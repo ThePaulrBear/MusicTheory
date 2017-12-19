@@ -291,7 +291,7 @@ public class AbsoluteChord extends Chord {
 		//For each key
 		for(Key key : keysToCheck){
 			//Find the matching Roman numeral.
-			RomanNumeralChord romanNumeral = key.romanNumeralFromAbsoluteChord(this);
+			RomanNumeral romanNumeral = key.romanNumeralFromAbsoluteChord(this);
 
 			//If chord is not contained in key, continue.
 			if(romanNumeral == null) {

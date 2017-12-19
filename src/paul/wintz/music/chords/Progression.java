@@ -83,7 +83,7 @@ public class Progression {
 		final Key key;
 		int precedence;
 
-		PossibleKey(Key key, RomanNumeralChord chord){
+		PossibleKey(Key key, RomanNumeral chord){
 			precedence = chord.getRomanNumeralType().precedence;
 			this.key = key;
 		}
@@ -110,7 +110,7 @@ public class Progression {
 
 		for(Key key : Key.getAllKeys()){
 			//try to create Roman numeral
-			RomanNumeralChord rn = key.romanNumeralFromAbsoluteChord(chordsInProgression.get(i));
+			RomanNumeral rn = key.romanNumeralFromAbsoluteChord(chordsInProgression.get(i));
 
 			//If Roman numeral was not found skip to next key.
 			if(rn == null) {
@@ -127,7 +127,7 @@ public class Progression {
 			matchingKeys.clear();
 
 			for(PossibleKey key : possibleKeys){
-				RomanNumeralChord rn = key.getKey().romanNumeralFromAbsoluteChord(chordsInProgression.get(i));
+				RomanNumeral rn = key.getKey().romanNumeralFromAbsoluteChord(chordsInProgression.get(i));
 				if(rn == null) {
 					continue;
 				}
@@ -193,7 +193,7 @@ public class Progression {
 			Key key) {
 		int finalIndex = chordsInProgression.size() - 1;
 		AbsoluteChord chord = chordsInProgression.get(finalIndex);
-		RomanNumeralChord rn = key.romanNumeralFromAbsoluteChord(chord);
+		RomanNumeral rn = key.romanNumeralFromAbsoluteChord(chord);
 		if(rn == null) return null;
 		AbsoluteRomanNumeralChord romanNumeral = new AbsoluteRomanNumeralChord(rn, key, chord);
 		return romanNumeral;

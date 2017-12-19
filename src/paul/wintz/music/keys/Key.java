@@ -2,7 +2,6 @@ package paul.wintz.music.keys;
 
 import java.util.*;
 
-import paul.wintz.music.*;
 import paul.wintz.music.chords.*;
 import paul.wintz.music.notes.PitchClass;
 
@@ -29,7 +28,7 @@ public class Key  {
 		this.mode = mode;
 	}
 
-	public AbsoluteChord absoluteChordFromRomanNumeral(RomanNumeralChord romanNumeral){
+	public AbsoluteChord absoluteChordFromRomanNumeral(RomanNumeral romanNumeral){
 		PitchClass root = this.getTonic().addHalfsteps(romanNumeral.getHalfStepsAboveTonic());
 
 		return new AbsoluteChord(root, romanNumeral.quality);
@@ -41,12 +40,13 @@ public class Key  {
 	 * @return
 	 * Returns null if no Roman numeral is found
 	 */
-	public RomanNumeralChord romanNumeralFromAbsoluteChord(AbsoluteChord chord){
+	public RomanNumeral romanNumeralFromAbsoluteChord(AbsoluteChord chord){
 		int halfStepsAboveTonic = PitchClass.getDifferneceInHalfSteps(tonic, chord.getRoot());
 		if(halfStepsAboveTonic < 0) {
 			halfStepsAboveTonic += 12;
 		}
-		return RomanNumeralChord.makeRomanNumeral(this.mode, halfStepsAboveTonic, chord.quality);
+
+		return RomanNumeral.makeRomanNumeral(this.mode, halfStepsAboveTonic, chord.quality);
 	}
 
 	public boolean containsChord(AbsoluteChord chord){
