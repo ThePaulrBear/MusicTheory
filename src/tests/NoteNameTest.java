@@ -26,16 +26,16 @@ public class NoteNameTest {
 
 	@Test
 	public void testNoteName() throws Exception {
-		NoteClass name = new NoteClass(NaturalPitchClass.D, Accidental.SHARP);
+		NoteClass name = new NoteClass(NoteLetter.D, Accidental.SHARP);
 		assertEquals("Names don't match", name.getName(), "D" + UnicodSymbol.SHARP);
 	}
 	
 	@Test
 	public void testGetNoteAtInterval() throws Exception {
 		for(IntervalEnum intervalEnum : IntervalEnum.values()){
-			for(NaturalPitchClass naturalPitchClass : NaturalPitchClass.values()){
+			for(NoteLetter noteLetter : NoteLetter.values()){
 				for(Accidental acc : Accidental.values()){
-					NoteClass noteClass = new NoteClass(naturalPitchClass, acc);
+					NoteClass noteClass = new NoteClass(noteLetter, acc);
 					NoteClass second = NoteClass.getNoteAtInterval(noteClass, intervalEnum);
 					
 					String errorMsg = "NoteClass: " + noteClass.getName() +
@@ -48,7 +48,7 @@ public class NoteNameTest {
 					if(second.isDefaultName()){
 						out.println("Invalid note, reverted to default note for pitch class\n" + errorMsg);
 					} else {
-						assertEquals("Wrong base.\n" + errorMsg, (noteClass.getBase().ordinal() + intervalEnum.getScaleSteps()) % NaturalPitchClass.values().length, second.getBase().ordinal());
+						assertEquals("Wrong base.\n" + errorMsg, (noteClass.getBase().ordinal() + intervalEnum.getScaleSteps()) % NoteLetter.values().length, second.getBase().ordinal());
 					}
 				}
 			}

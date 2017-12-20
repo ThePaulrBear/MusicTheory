@@ -3,36 +3,33 @@
  */
 package paul.wintz.music.notes;
 
-import com.google.common.base.Preconditions;
-
-import paul.wintz.music.UnicodSymbol;
 import paul.wintz.music.intervals.IntervalEnum;
 
 /**
- * A pitchClass is a pitch class with a specified name.
+ * A pitchClass is a note with a specified name.
  * For example, the pitch class 1 (C#), could be the pitchClass
- * Bx, C#, or Db. All these possibilities are unique.
+ * Bx, C#, or Db, but these are three distinct NoteClasses.
  *
- * @author PaulWintz
- *
+ * NoteClasses are distinct from notes in that they are agnostic
+ * about octaves, so A#2 and A#4 would be the same NoteClass: A#
  */
 public class NoteClass {
 	private final PitchClass pitchClass;
-	private final NaturalPitchClass naturalPitchClass;
+	private final NoteLetter noteLetter;
 	private final Accidental accidental;
 	private final boolean isDefaultName;
 
-	public NoteClass(NaturalPitchClass naturalPitchClass, Accidental accidental){
-		this.naturalPitchClass = naturalPitchClass;
+	public NoteClass(NoteLetter noteLetter, Accidental accidental){
+		this.noteLetter = noteLetter;
 		this.accidental = accidental;
-		pitchClass = naturalPitchClass.getBaseNote().addHalfsteps(accidental.shift);
+		pitchClass = noteLetter.getBaseNote().addHalfsteps(accidental.shift);
 		isDefaultName = false;
 	}
 
 	//Get default NoteName for a PitchClass
 	public NoteClass(PitchClass note){
-		this.naturalPitchClass = NaturalPitchClass.pitchClassToBase(note);
-		this.accidental = Accidental.accidentalFromBaseAndPitchClass(naturalPitchClass, note);
+		this.noteLetter = NoteLetter.pitchClassToBase(note);
+		this.accidental = Accidental.accidentalFromBaseAndPitchClass(noteLetter, note);
 		this.pitchClass = note;
 		this.isDefaultName = true;
 	}
@@ -42,15 +39,15 @@ public class NoteClass {
 	}
 
 	public String getName(){
-		return naturalPitchClass.name() + accidental.getSymbol();
+		return noteLetter.name() + accidental.getSymbol();
 	}
 
 	public PitchClass getNote() {
 		return pitchClass;
 	}
 
-	public NaturalPitchClass getBase() {
-		return naturalPitchClass;
+	public NoteLetter getBase() {
+		return noteLetter;
 	}
 
 	public Accidental getAccidental() {
@@ -63,13 +60,13 @@ public class NoteClass {
 
 	@Override
 	public String toString(){
-		return naturalPitchClass.name() + accidental.symbol;
+		return noteLetter.name() + accidental.symbol;
 	}
 
 	public static NoteClass getNoteAtInterval(NoteClass root, IntervalEnum intervalEnum) {
 
-		int newOrdinal = (root.naturalPitchClass.ordinal() + intervalEnum.getScaleSteps()) % NaturalPitchClass.values().length;
-		NaturalPitchClass newBase = NaturalPitchClass.values()[newOrdinal];
+		int newOrdinal = (root.noteLetter.ordinal() + intervalEnum.getScaleSteps()) % NoteLetter.values().length;
+		NoteLetter newBase = NoteLetter.values()[newOrdinal];
 		PitchClass newNote = root.pitchClass.addInterval(intervalEnum);
 
 		try {
@@ -90,7 +87,7 @@ public class NoteClass {
 		////			throw new Exception
 		//		String errorMsg = "\nRoot: " + root.toString()
 		//			+ "\nInterval: " + interval.toString()
-		//			+ "\nNew NaturalPitchClass: " + newBase.toString()
+		//			+ "\nNew NoteLetter: " + newBase.toString()
 		//			+ "\nTarget Half Steps: " + targetHalfSteps
 		//			+ "\nHalf Steps Between: " + halfStepsBetween
 		//			+ "\nAccidental Shift: " + accidentalShift
@@ -108,82 +105,5 @@ public class NoteClass {
 
 		//		out.println("Second pitchClass newBase.name() + newAccidental.symbol");
 		//		return new NoteName(newBase, newAccidental);
-	}
-
-
-
-	public enum Accidental {
-		DOUBLE_FLAT (-2, UnicodSymbol.DOUBLE_FLAT),
-		FLAT (-1, UnicodSymbol.FLAT),
-		NATURAL (0, UnicodSymbol.NATURAL),
-		SHARP (+1, UnicodSymbol.SHARP),
-		DOUBLE_SHARP (+2, UnicodSymbol.DOUBLE_SHARP);
-
-		private final int shift;
-		private final String symbol;
-
-		private Accidental(int shift, String symbol) {
-			this.shift = shift;
-			this.symbol = symbol;
-		}
-
-		private int getShift() {
-			return shift;
-		}
-
-		private String getSymbol() {
-			return symbol;
-		}
-
-		private static Accidental accidentalFromBaseAndPitchClass(NaturalPitchClass naturalPitchClass, PitchClass note) throws IllegalArgumentException{
-			int halfStepsBetween = PitchClass.getDifferneceInHalfSteps(naturalPitchClass.getNoteNumber(), note.getNoteNumber());
-
-			int accidentalShift = halfStepsBetween;
-
-			String errorMsg = "\nNote: " + note.toString()
-			+ "\nBase: " + naturalPitchClass.toString()
-			+ "\nHalf Steps Between: " + halfStepsBetween
-			+ "\nAccidental Shift: " + accidentalShift
-			;
-
-			//			try {
-			return Accidental.accidentalFromShift(accidentalShift);
-			//			} catch (IllegalArgumentException e) {
-			//				throw new IllegalArgumentException(e.getMessage() + errorMsg);
-			//			}
-		}
-
-		/**
-		 *
-		 * @param shift
-		 * 		Must be between -2 and +2.
-		 * @return accidental
-		 * 		Accidental that gives the shift specified in parameter.
-		 *
-		 */
-		public static Accidental accidentalFromShift(int shift){
-			Preconditions.checkArgument(-2 <= shift && shift <= 2, "Must be between -2 and +2.");
-			shift %= 12;
-
-			switch(shift){
-			case -2:
-			case 10:
-				return DOUBLE_FLAT;
-			case -1:
-			case 11:
-				return FLAT;
-			case 0:
-			case 12:
-				return NATURAL;
-			case +1:
-			case -11:
-				return SHARP;
-			case +2:
-			case -10:
-				return DOUBLE_SHARP;
-			default:
-				throw new IllegalArgumentException("The shift, " + shift + ", was too far to be handled by an accidental");
-			}
-		}
 	}
 }

@@ -8,29 +8,29 @@ import paul.wintz.music.notes.*;
 public enum Mode {
 	MAJOR (
 			RomanNumeral.Major.MAJOR,
-			SolfegeEnum.DO,
-			SolfegeEnum.RE,
-			SolfegeEnum.MI,
-			SolfegeEnum.FA,
-			SolfegeEnum.SOL,
-			SolfegeEnum.LA,
-			SolfegeEnum.TI
+			Solfege.DO,
+			Solfege.RE,
+			Solfege.MI,
+			Solfege.FA,
+			Solfege.SOL,
+			Solfege.LA,
+			Solfege.TI
 			),
 	MINOR (
 			RomanNumeral.Minor.MINOR,
-			SolfegeEnum.DO,
-			SolfegeEnum.RE,
-			SolfegeEnum.MI,
-			SolfegeEnum.FA,
-			SolfegeEnum.SOL,
-			SolfegeEnum.LE,
-			SolfegeEnum.TE);
+			Solfege.DO,
+			Solfege.RE,
+			Solfege.MI,
+			Solfege.FA,
+			Solfege.SOL,
+			Solfege.LE,
+			Solfege.TE);
 
-	private final SolfegeEnum[] solfegeEnum;
+	private final Solfege[] solfege;
 	private final RomanNumeral[] relativeChords;
 
-	Mode (RomanNumeral[] diatonicQualities, SolfegeEnum... solfege){
-		this.solfegeEnum = solfege;
+	Mode (RomanNumeral[] diatonicQualities, Solfege... solfege){
+		this.solfege = solfege;
 		this.relativeChords = diatonicQualities;
 	}
 
@@ -41,7 +41,7 @@ public enum Mode {
 
 	//GETTERS
 	int getHalfstepsAboveTonic(ScaleDegree deg){
-		return solfegeEnum[deg.ordinal()].getHalfstepsAboveTonic();
+		return solfege[deg.ordinal()].getHalfstepsAboveTonic();
 	}
 
 	List<RomanNumeral> getMatchingRelativeChords(PitchClass tonic, AbsoluteChord chordToMatch){
@@ -72,7 +72,7 @@ public enum Mode {
 	public List<NoteClass> getNotes(NoteClass tonic){
 		List<NoteClass>  noteClass = new ArrayList<>();
 
-		for(SolfegeEnum slfg : getSolfege()){
+		for(Solfege slfg : getSolfege()){
 			noteClass.add(slfg.toNote(tonic));
 		}
 
@@ -83,8 +83,8 @@ public enum Mode {
 		return relativeChords;
 	}
 
-	public SolfegeEnum[] getSolfege() {
-		return solfegeEnum;
+	public Solfege[] getSolfege() {
+		return solfege;
 	}
 
 	public String notesToString(NoteClass tonic){

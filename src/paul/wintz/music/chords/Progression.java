@@ -4,7 +4,6 @@ import static java.lang.System.out;
 
 import java.util.*;
 
-import paul.wintz.music.chords.*;
 import paul.wintz.music.keys.Key;
 import paul.wintz.music.notes.PitchClass;
 
@@ -40,7 +39,7 @@ public class Progression {
 			boolean isSameChord = chord.equals(previousChord);
 			if(isSameChord)
 				return;
-			out.println(chord.toString() + "\t" + chord.pitchClassesToString());
+			out.println(chord + "\t" + chord.pitchClassesToString());
 
 			chords.add(chord);
 
@@ -102,8 +101,8 @@ public class Progression {
 		//If there were no chords, then the key will not be found.
 		if(chordsInProgression.isEmpty()) return;
 
-		ArrayList<PossibleKey> possibleKeys = new ArrayList<>();
-		ArrayList<PossibleKey> matchingKeys = new ArrayList<>();
+		List<PossibleKey> possibleKeys = new ArrayList<>();
+		List<PossibleKey> matchingKeys = new ArrayList<>();
 
 		int finalIndex = chordsInProgression.size() - 1;
 		int i = finalIndex;
@@ -174,8 +173,8 @@ public class Progression {
 			if(chord == null) {
 				continue;
 			}
-			line1 += String.format("%-12s", chord.getKey().toString());
-			line2 += String.format("%-12s", chord.getRomanNumeral().toString());
+			line1 += String.format("%-14s", chord.getKey());
+			line2 += String.format("%-14s", chord.getRomanNumeral());
 
 		}
 		out.println("\t" + line1 + "\n\t" + line2 + "\n");

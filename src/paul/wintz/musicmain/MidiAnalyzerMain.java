@@ -23,8 +23,8 @@ public class MidiAnalyzerMain {
 	private static final String ADAGIO_FOR_STRINGS = "midi/Adagio-For-Strings-Opus-11.mid";
 	private static final String WONDERFUL_WORLD = "midi/ARMSTRONG.What wonderful world 2 K.MID";
 
-	private static String songFile = AVE_MARIA_BACH;
-	private static int millisPerFrame = 25;
+	private static String songFile = BEETHOVEN_FIFTH;
+	private static int millisPerFrame = 100;
 
 
 	public static void main(String[] args) throws Exception {

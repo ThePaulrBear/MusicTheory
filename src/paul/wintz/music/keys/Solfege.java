@@ -1,32 +1,35 @@
 package paul.wintz.music.keys;
 
+import static paul.wintz.music.intervals.IntervalEnum.*;
+import static paul.wintz.music.keys.ScaleDegree.*;
+
 import paul.wintz.music.intervals.IntervalEnum;
 import paul.wintz.music.notes.NoteClass;
 
-public enum SolfegeEnum {
-	DO (0, ScaleDegree.TONIC, 		IntervalEnum.UNISON),
-	//	DI (1, ScaleDegree.TONIC 		IntervalEnum.AUGMENTED_UNISON),
-	RA (1, ScaleDegree.SUPERTONIC,	IntervalEnum.MINOR_SECOND),
-	RE (2, ScaleDegree.SUPERTONIC,	IntervalEnum.MAJOR_SECOND),
-	//	RI (3, ScaleDegree.SUPERTONIC,	IntervalEnum.AUGMENTED_SECOND),
-	ME (3, ScaleDegree.MEDIANT,		IntervalEnum.MINOR_THIRD),
-	MI (4, ScaleDegree.MEDIANT,		IntervalEnum.MAJOR_THIRD),
-	FA (5, ScaleDegree.SUBDOMINANT,	IntervalEnum.PERFECT_FOURTH),
-	FI (6, ScaleDegree.SUBDOMINANT,	IntervalEnum.TRITONE),
-	//	SE (6, ScaleDegree.DOMINANT,	IntervalEnum.DIMINISHED_FIFTH),
-	SOL(7, ScaleDegree.DOMINANT,	IntervalEnum.PERFECT_FIFTH),
-	//	SI (8, ScaleDegree.DOMINANT,	IntervalEnum.AUGMENTED_FIFTH),
-	LE (8, ScaleDegree.SUBMEDIANT,	IntervalEnum.MINOR_SIXTH),
-	LA (9, ScaleDegree.SUBMEDIANT,	IntervalEnum.MAJOR_SIXTH),
-	//	LI (10,ScaleDegree.SUBMEDIANT,	IntervalEnum.AUGMENTED_SIXTH),
-	TE (10,ScaleDegree.LEADING_TONE,IntervalEnum.MINOR_SEVENTH),
-	TI (11,ScaleDegree.LEADING_TONE,IntervalEnum.MAJOR_SEVENTH);
+public enum Solfege {
+	DO (0, TONIC, 		UNISON),
+	//DI (1, TONIC, 		AUGMENTED_UNISON),
+	RA (1, SUPERTONIC,	MINOR_SECOND),
+	RE (2, SUPERTONIC,	MAJOR_SECOND),
+	//	RI (3, SUPERTONIC,	AUGMENTED_SECOND),
+	ME (3, MEDIANT,		MINOR_THIRD),
+	MI (4, MEDIANT,		MAJOR_THIRD),
+	FA (5, SUBDOMINANT,	PERFECT_FOURTH),
+	FI (6, SUBDOMINANT,	TRITONE),
+	//	SE (6, DOMINANT,	DIMINISHED_FIFTH),
+	SOL(7, DOMINANT,	PERFECT_FIFTH),
+	//	SI (8, DOMINANT,	AUGMENTED_FIFTH),
+	LE (8, SUBMEDIANT,	MINOR_SIXTH),
+	LA (9, SUBMEDIANT,	MAJOR_SIXTH),
+	//	LI (10,SUBMEDIANT,	AUGMENTED_SIXTH),
+	TE (10,LEADING_TONE,MINOR_SEVENTH),
+	TI (11,LEADING_TONE,MAJOR_SEVENTH);
 
 	private final int halfstepsAboveTonic;
 	private final ScaleDegree scaleDegree;
 	private final IntervalEnum intervalAboveTonic;
 
-	SolfegeEnum(int halfstepsAboveTonic, ScaleDegree scaleDegree, IntervalEnum intervalAboveTonic){
+	private Solfege(int halfstepsAboveTonic, ScaleDegree scaleDegree, IntervalEnum intervalAboveTonic){
 		this.halfstepsAboveTonic = halfstepsAboveTonic;
 		this.scaleDegree = scaleDegree;
 		this.intervalAboveTonic = intervalAboveTonic;
@@ -45,7 +48,7 @@ public enum SolfegeEnum {
 	}
 
 	@SuppressWarnings("incomplete-switch")
-	static SolfegeEnum getSolfegeFromScaleDegree(ScaleDegree degree,
+	static Solfege getSolfegeFromScaleDegree(ScaleDegree degree,
 			ScaleDegree.Modification modificationFromMajor) throws IllegalAccessException {
 		switch(degree){
 		case TONIC:

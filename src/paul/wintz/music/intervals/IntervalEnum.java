@@ -4,6 +4,8 @@ import static java.lang.Math.abs;
 
 import java.util.List;
 
+import com.google.common.base.Preconditions;
+
 import paul.wintz.music.notes.PitchClass;
 
 //Intervals will default to the first interval with a given scaleSteps of half-steps.
@@ -37,18 +39,20 @@ public enum IntervalEnum {
 	NULL			(99, 99),
 	MULTIPLE		(100, 100);
 
+	public static final int MAX_SCALE_DEGREE = 14;
+	public static final int MAX_HALF_STEPS = 24;
 	private static final int HALF_STEPS_IN_OCTAVE = 12;
 	private final int halfSteps;
 	private final int scaleSteps;
 	private final boolean isDefault;
 
-	IntervalEnum(int scaleSteps, int halfSteps){
+	private IntervalEnum(int scaleSteps, int halfSteps){
 		this.scaleSteps = scaleSteps;
 		this.halfSteps = halfSteps;
 		this.isDefault = true;
 	}
 
-	IntervalEnum(int scaleSteps, int halfSteps, boolean isDefault){
+	private IntervalEnum(int scaleSteps, int halfSteps, boolean isDefault){
 		this.scaleSteps = scaleSteps;
 		this.halfSteps = halfSteps;
 		this.isDefault = isDefault;
@@ -68,8 +72,6 @@ public enum IntervalEnum {
 
 	private static int getScaleSteps(int noteNumber1, int noteNumber2){
 		IntervalEnum deg = getDefaultInterval(noteNumber1, noteNumber2);
-		PitchClass.getDifferneceInHalfSteps(noteNumber1, noteNumber2);
-
 		switch(deg){
 		case UNISON:
 			return 1;
@@ -191,7 +193,7 @@ public enum IntervalEnum {
 				return IntervalEnum.MULTIPLE;
 		}
 
-		assert(intervalEnum.getScaleSteps() == scaleSteps || intervalEnum == IntervalEnum.NULL);
+		Preconditions.checkState(intervalEnum.getScaleSteps() == scaleSteps || intervalEnum == IntervalEnum.NULL);
 		return intervalEnum;
 	}
 
@@ -223,4 +225,7 @@ public enum IntervalEnum {
 		return findQualityOfOridinal(notes, 12);
 	}
 
+	public boolean isPresent() {
+		return this != NULL;
+	}
 }

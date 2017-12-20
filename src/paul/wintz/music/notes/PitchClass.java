@@ -1,12 +1,13 @@
 package paul.wintz.music.notes;
 
+import paul.wintz.music.UnicodSymbol;
 import paul.wintz.music.intervals.IntervalEnum;
 import paul.wintz.utils.exceptions.UnhandledCaseException;
 
 public enum PitchClass {
 	//Flats are used because octothorpes, #'s, do not work.
 	//The names used here are only for identification,
-	C, Db , D, Eb, E, F, Gb, G, Ab, A, Bb, B;
+	C, C_SHARP , D, D_SHARP, E, F, F_SHARP, G, G_SHARP, A, A_SHARP, B;
 
 	private enum AccidentalType{
 		FLAT, SHARP;
@@ -45,54 +46,54 @@ public enum PitchClass {
 		switch(pitchClass){
 		case C:
 			return "C";
-		case Db:
+		case C_SHARP:
 			switch (accidentalPreference) {
 			case SHARP:
 				return "C#";
 			case FLAT:
-				return "Db";
+				return "D" + UnicodSymbol.FLAT;
 			}
 			break;
 		case D:
 			return "D";
-		case Eb:
+		case D_SHARP:
 			switch (accidentalPreference) {
 			case SHARP:
 				return "D#";
 			case FLAT:
-				return "Eb";
+				return "E" + UnicodSymbol.FLAT;
 			}
 			break;
 		case E:
 			return "E";
 		case F:
 			return "F";
-		case Gb:
+		case F_SHARP:
 			switch (accidentalPreference) {
 			case SHARP:
 				return "F#";
 			case FLAT:
-				return "Gb";
+				return "G" + UnicodSymbol.FLAT;
 			}
 			break;
 		case G:
 			return "G";
-		case Ab:
+		case G_SHARP:
 			switch (accidentalPreference) {
 			case SHARP:
 				return "G#";
 			case FLAT:
-				return "Ab";
+				return "A" + UnicodSymbol.FLAT;
 			}
 			break;
 		case A:
 			return "A";
-		case Bb:
+		case A_SHARP:
 			switch (accidentalPreference) {
 			case SHARP:
 				return "A#";
 			case FLAT:
-				return "Bb";
+				return "B" + UnicodSymbol.FLAT;
 			}
 			break;
 		case B:
@@ -101,4 +102,12 @@ public enum PitchClass {
 
 		throw new UnhandledCaseException(pitchClass);
 	}
+
+
+	@Override
+	public String toString() {
+		return getName(this, AccidentalType.FLAT);
+	}
+
+
 }

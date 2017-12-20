@@ -13,9 +13,9 @@ public class ModeTest {
 	@Test
 	public void testGetNotes() throws Exception {
 		for(Mode mode : Mode.values()){
-			for (NaturalPitchClass naturalPitchClass : NaturalPitchClass.values()) {
+			for (NoteLetter noteLetter : NoteLetter.values()) {
 				for (Accidental accidental : Accidental.values()) {
-					NoteClass tonic = new NoteClass(naturalPitchClass, accidental);
+					NoteClass tonic = new NoteClass(noteLetter, accidental);
 
 					out.println("-------------\n"+ "Key: " + tonic.getName() + " " + mode.toString());
 

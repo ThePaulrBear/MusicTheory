@@ -4,9 +4,11 @@ import static com.google.common.base.Preconditions.checkState;
 import static paul.wintz.music.UnicodSymbol.*;
 import static paul.wintz.music.chords.ChordQuality.*;
 import static paul.wintz.music.chords.RomanNumeral.Type.*;
-import static paul.wintz.music.keys.SolfegeEnum.*;
+import static paul.wintz.music.keys.Solfege.*;
 
 import java.util.*;
+
+import com.google.common.collect.ImmutableList;
 
 import paul.wintz.music.keys.*;
 
@@ -15,13 +17,13 @@ public class RomanNumeral extends Chord {
 	private static final Map<String, RomanNumeral> allRomanNumerals = new HashMap<>();
 	private static Random random = new Random();
 
-	private SolfegeEnum rootSolfege;
+	private Solfege rootSolfege;
 	private Type type;
-	private List<RomanNumeral> possibleNextChords = new ArrayList<>();
+	private List<RomanNumeral> possibleNextChords;
 
 	private final String representation;
 
-	public RomanNumeral(SolfegeEnum rootSolfege, ChordQuality quality, Type type, String romanNumeral){
+	public RomanNumeral(Solfege rootSolfege, ChordQuality quality, Type type, String romanNumeral){
 		this.rootSolfege = rootSolfege;
 		this.quality = quality;
 		this.representation = romanNumeral;
@@ -29,9 +31,8 @@ public class RomanNumeral extends Chord {
 	}
 
 	private void setPossibleNextChords(RomanNumeral... chords){
-		for(RomanNumeral chord : chords){
-			possibleNextChords.add(chord);
-		}
+		checkState(possibleNextChords == null);
+		possibleNextChords = ImmutableList.copyOf(chords);
 	}
 
 	public int getHalfStepsAboveTonic(){
@@ -187,6 +188,7 @@ public class RomanNumeral extends Chord {
 	private static String getHash(String mode, RomanNumeral chord) {
 		return mode + chord.getHalfStepsAboveTonic() + chord.quality.name();
 	}
+
 	private static String getHash(Mode mode, int halfStepsAboveTonic, ChordQuality quality) {
 		return mode.name() + halfStepsAboveTonic + quality.name();
 	}

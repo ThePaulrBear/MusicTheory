@@ -15,7 +15,7 @@ import paul.wintz.music.notes.PitchClass;
  * @author PaulWintz
  *
  * Absolute Chord contains the root, quality and notes of
- * a specific chord, (e.g. G min, Bb dim7, C+).
+ * a specific chord, (e.g. G min, Ab dim7, C+).
  */
 public class AbsoluteChord extends Chord {
 
@@ -46,14 +46,29 @@ public class AbsoluteChord extends Chord {
 			IntervalEnum eleventhType = IntervalEnum.findEleventhType(notes);
 			IntervalEnum thirteenthType = IntervalEnum.findThirteenthType(notes);
 
-			intervalEnums.add(thirdType);
-			intervalEnums.add(fifthType);
-			intervalEnums.add(seventhType);
-			intervalEnums.add(ninthType);
-			intervalEnums.add(eleventhType);
-			intervalEnums.add(thirteenthType);
+			if(thirdType.isPresent()) {
+				intervalEnums.add(thirdType);
+			}
+			if(fifthType.isPresent()) {
+				intervalEnums.add(fifthType);
+			}
+			if(seventhType.isPresent()) {
+				intervalEnums.add(seventhType);
+			}
+			if(ninthType.isPresent()) {
+				intervalEnums.add(ninthType);
+			}
+			if(eleventhType.isPresent()) {
+				intervalEnums.add(eleventhType);
+			}
+			if(thirteenthType.isPresent()) {
+				intervalEnums.add(thirteenthType);
+			}
 
-			quality = ChordQuality.calculate(thirdType, fifthType, seventhType, ninthType, eleventhType, thirteenthType);
+			IntervalEnum[] a = new IntervalEnum[intervalEnums.size()];
+			intervalEnums.toArray(a);
+
+			quality = ChordQuality.calculate(a);
 
 			if(quality.isValid()) {
 				break;
@@ -216,7 +231,7 @@ public class AbsoluteChord extends Chord {
 
 			notes.add(PitchClass.C);
 			notes.add(PitchClass.E);
-			notes.add(PitchClass.Ab);
+			notes.add(PitchClass.G_SHARP);
 
 			AbsoluteChord chord = new AbsoluteChord(notes);
 
@@ -270,16 +285,10 @@ public class AbsoluteChord extends Chord {
 	public String pitchClassesToString(){
 		StringBuilder sb = new StringBuilder();
 		for(PitchClass note : notes){
-			sb.append(" ").append(note.name());
+			sb.append(" ").append(note);
 		}
 		return sb.toString();
 	}
-
-	@Override
-	public String toString(){
-		return root.name() + quality.getSufix();
-	}
-
 
 	public List<AbsoluteRomanNumeralChord> getAllPossibleRomanNumerals(){
 		return getPossibleRomanNumerals(Key.getAllKeys());
@@ -337,5 +346,10 @@ public class AbsoluteChord extends Chord {
 		AbsoluteChord other = (AbsoluteChord) obj;
 
 		return this.quality == other.quality && this.root == other.root;
+	}
+
+	@Override
+	public String toString(){
+		return root + quality.getSufix();
 	}
 }

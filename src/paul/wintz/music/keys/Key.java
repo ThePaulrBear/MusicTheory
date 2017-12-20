@@ -14,7 +14,7 @@ public class Key  {
 		for(PitchClass tonic : PitchClass.values()){
 			for(Mode mode : Mode.values()){
 				Key key = new Key(tonic, mode);
-				allKeys.put(tonic.name() + mode.name(), key);
+				allKeys.put(tonic + mode.name(), key);
 				allKeysArray.add(key);
 			}
 		}
@@ -78,6 +78,6 @@ public class Key  {
 
 	@Override
 	public String toString(){
-		return this.tonic.name() + " " + this.mode.name();
+		return this.tonic + " " + this.mode;
 	}
 }

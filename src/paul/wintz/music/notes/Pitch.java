@@ -1,13 +1,15 @@
 package paul.wintz.music.notes;
 
+import paul.wintz.utils.Utils;
+
 public class Pitch {
 
 	//Variables relating to note naming and tuning
-	final static float A4 = 440;
-	final static float A0 = A4 / 16;
-	final static String[] NAMES_FLATS = {
-			"A", "Bb", "B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A"};
-	final static String[] NAMES_SHARPS = {
+	private static final float A4 = 440;
+	private static final float A0 = A4 / 16;
+	private static final String[] NAMES_FLATS = {
+			"A", "A_SHARP", "B", "C", "C_SHARP", "D", "D_SHARP", "E", "F", "F_SHARP", "G", "G_SHARP", "A"};
+	private static final String[] NAMES_SHARPS = {
 			"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A"};
 
 	public float frequency;
@@ -20,45 +22,29 @@ public class Pitch {
 	public float cents;
 	public String name;
 
-	public double getFrequency() {
+	public float getFrequency() {
 		return frequency;
 	}
 
-	/**
-	 * Creates a NoteClass from a spectrum centered at index "i"
-	 *
-	 * @param spectrum
-	 * @param i
-	 * @param timeIn
-	 */
 	public Pitch(float noteNumber){
 		frequency = noteToFrequency(noteNumber);
 		this.setNote(noteNumber, 0);
 	}
 
-	public Pitch(float[] spectrum, int i, float timeIn){
-		if(this.strength < 0) {
-			System.err.println("An index that is not a maximum was used in the NoteClass constructor");
-		}
-		this.time = timeIn;
-		this.noteNumber = Pitch.frequencyToNoteNumber(frequency);
-		this.setNote(noteNumber, timeIn);
-	}
-
-	public Pitch(float inputFrequency, float strengthIn, float timeIn) {
-		frequency = inputFrequency; //
+	public Pitch(float frequency, float strengthIn, float time) {
+		this.frequency = frequency;
 		noteNumber = Pitch.frequencyToNoteNumber(frequency);
-		setNote(noteNumber, timeIn);
+		setNote(noteNumber, time);
 		strength = strengthIn;
-		time = timeIn; //change to time
+		this.time = time;
 	}
 
-	Pitch(Pitch _anotherNote) { //does not include harmonics
-		this.frequency = _anotherNote.frequency; //
-		this.noteNumber = _anotherNote.noteNumber;
-		this.setNote(noteNumber, _anotherNote.time);
-		this.strength = _anotherNote.strength;
-		this.time = _anotherNote.time; //change to time
+	public Pitch(Pitch anotherNote) {
+		this.frequency = anotherNote.frequency; //
+		this.noteNumber = anotherNote.noteNumber;
+		this.setNote(noteNumber, anotherNote.time);
+		this.strength = anotherNote.strength;
+		this.time = anotherNote.time; //change to time
 	}
 
 	public void setNote(float inputFrequency, float strengthIn, float timeIn) {
@@ -83,22 +69,12 @@ public class Pitch {
 		{
 			octave++; //adjusts for octaves incrementing at C instead of A.
 		}
-		cents = 100 * (noteNumber % 1 < 0.5 ? noteNumber % 1 : noteNumber % 1 - 1); //ranges from 0 to .50
+		cents = centsFromNoteNumber(noteNumber);
 		name = (octaveDegree >= 0)? (NAMES_SHARPS[octaveDegree] + octave): "null";
 	}
 
-	void printNote() {
-		System.out.print(toString());
-	}
-
-	@Override
-	public String toString(){
-		return name + ", " + noteNumber + ", " + frequency + "Hz, strength: " + strength + "\n";
-	}
-
-	static float log2 (float x) {
-		float y = (float) (Math.log(x) / Math.log(2));
-		return y;
+	private float centsFromNoteNumber(float noteNumber) {
+		return 100 * (noteNumber % 1 < 0.5 ? noteNumber % 1 : noteNumber % 1 - 1);
 	}
 
 	//TODO: convert A0 to noteNumber 21
@@ -109,6 +85,11 @@ public class Pitch {
 
 	//TODO: convert A0 to noteNumber 21
 	public static float frequencyToNoteNumber( float frequency ) {
-		return 12 * Pitch.log2(frequency / Pitch.A0);
+		return 12 * Utils.log2(frequency / Pitch.A0);
+	}
+
+	@Override
+	public String toString(){
+		return name + ", " + noteNumber + ", " + frequency + "Hz, strength: " + strength;
 	}
 }
