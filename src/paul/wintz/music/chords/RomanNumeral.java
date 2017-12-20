@@ -84,20 +84,20 @@ public class RomanNumeral extends Chord {
 					vi = new RomanNumeral(LA, MINOR_TRIAD, DIATONIC, "vi"),
 					viiDim = new RomanNumeral(TI, DIMINISHED_TRIAD, DIATONIC, "vii" + DIMINISHED),
 
-					IM7 = new RomanNumeral(DO, MAJOR_SEVENTH, DIATONIC, "I maj7"),
-					iim7 = new RomanNumeral(RE, MINOR_SEVENTH, DIATONIC, "ii min7"),
-					iiim7 = new RomanNumeral(MI, MINOR_SEVENTH, DIATONIC, "iii min7"),
-					IVM7 = new RomanNumeral(FA, MAJOR_SEVENTH, DIATONIC,"IV maj7"),
-					V7 = new RomanNumeral(SOL,DOMINANT_SEVENTH, DIATONIC,"V7"),
-					vim7 = new RomanNumeral(LA, MINOR_SEVENTH, DIATONIC, "vi min7"),
-					viiHalfDim7 = new RomanNumeral(TI, HALF_DIMINISHED_SEVENTH, DIATONIC,"vii" + HALF_DIMINISHED),
+					IM7 = new RomanNumeral(DO, MAJOR_7, DIATONIC, "I maj7"),
+					iim7 = new RomanNumeral(RE, MINOR_7, DIATONIC, "ii min7"),
+					iiim7 = new RomanNumeral(MI, MINOR_7, DIATONIC, "iii min7"),
+					IVM7 = new RomanNumeral(FA, MAJOR_7, DIATONIC,"IV maj7"),
+					V7 = new RomanNumeral(SOL,DOMINANT_7, DIATONIC,"V7"),
+					vim7 = new RomanNumeral(LA, MINOR_7, DIATONIC, "vi min7"),
+					viiHalfDim7 = new RomanNumeral(TI, HALF_DIMINISHED_7, DIATONIC,"vii" + HALF_DIMINISHED),
 
 					//Borrowed from minor
-					iiHalfDim7Borrowed = new RomanNumeral(RE, HALF_DIMINISHED_SEVENTH, BORROWED, "ii" + HALF_DIMINISHED),
+					iiHalfDim7Borrowed = new RomanNumeral(RE, HALF_DIMINISHED_7, BORROWED, "ii" + HALF_DIMINISHED),
 					flatIII = new RomanNumeral(ME, MAJOR_TRIAD, BORROWED, FLAT + "III"), //Flatted third
 					iv = new RomanNumeral(FA, MINOR_TRIAD, BORROWED,"iv"), //minor fourth
 					flatVI = new RomanNumeral(LE, MAJOR_TRIAD, BORROWED,FLAT + "VI"), //Flat sixth
-					viiDim7 = new RomanNumeral(TI, DIMINISHED_SEVENTH, BORROWED,"vii" + DIMINISHED + "7") //minor fourth
+					viiDim7 = new RomanNumeral(TI, DIMINISHED_7, BORROWED,"vii" + DIMINISHED + "7") //minor fourth
 			};
 			I.setPossibleNextChords(
 					ii, iii, IV, V, vi, viiDim, IM7, iim7, iiim7, IVM7, V7, vim7, viiHalfDim7,
@@ -154,20 +154,20 @@ public class RomanNumeral extends Chord {
 							VII = new RomanNumeral(TE, MAJOR_TRIAD, NATURAL_MINOR, "VII"),
 
 							//Define diatonic seventh chords in mode.
-							im7 = new RomanNumeral(DO, MINOR_SEVENTH, DIATONIC, "i min7"),
-							iiHalfDim7 = new RomanNumeral(RE, HALF_DIMINISHED_SEVENTH, DIATONIC, "ii" + HALF_DIMINISHED),
-							IIIM7 = new RomanNumeral(ME, MAJOR_SEVENTH, NATURAL_MINOR, "III maj7"),
-							ivm7 = new RomanNumeral(FA, MINOR_SEVENTH, DIATONIC, "iv min7"),
-							vm7 = new RomanNumeral(SOL, MINOR_SEVENTH, NATURAL_MINOR, "v min7"),
-							VIM7 = new RomanNumeral(LE, MAJOR_SEVENTH, DIATONIC, "VI maj7"),
-							VII7 = new RomanNumeral(TE, DOMINANT_SEVENTH, NATURAL_MINOR, "VII7"),
+							im7 = new RomanNumeral(DO, MINOR_7, DIATONIC, "i min7"),
+							iiHalfDim7 = new RomanNumeral(RE, HALF_DIMINISHED_7, DIATONIC, "ii" + HALF_DIMINISHED),
+							IIIM7 = new RomanNumeral(ME, MAJOR_7, NATURAL_MINOR, "III maj7"),
+							ivm7 = new RomanNumeral(FA, MINOR_7, DIATONIC, "iv min7"),
+							vm7 = new RomanNumeral(SOL, MINOR_7, NATURAL_MINOR, "v min7"),
+							VIM7 = new RomanNumeral(LE, MAJOR_7, DIATONIC, "VI maj7"),
+							VII7 = new RomanNumeral(TE, DOMINANT_7, NATURAL_MINOR, "VII7"),
 
 							//Harmonic Minor.
 							IIIAug = new RomanNumeral(ME, AUGMENTED_TRIAD, HARMONIC_MINOR, "III+"),
 							V = new RomanNumeral(SOL, MAJOR_TRIAD, HARMONIC_MINOR, "V"),
 							viiDim = new RomanNumeral(TI, DIMINISHED_TRIAD, HARMONIC_MINOR, "vii" + DIMINISHED),
-							V7 = new RomanNumeral(SOL, DOMINANT_SEVENTH, HARMONIC_MINOR, "V7"),
-							viiDim7 = new RomanNumeral(TI, DIMINISHED_SEVENTH, HARMONIC_MINOR, "vii" + DIMINISHED + "7"),
+							V7 = new RomanNumeral(SOL, DOMINANT_7, HARMONIC_MINOR, "V7"),
+							viiDim7 = new RomanNumeral(TI, DIMINISHED_7, HARMONIC_MINOR, "vii" + DIMINISHED + "7"),
 
 							N = new RomanNumeral(RA, MAJOR_TRIAD, CHROMATIC, "N")
 			};

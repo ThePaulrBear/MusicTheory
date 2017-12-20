@@ -1,44 +1,47 @@
 package paul.wintz.music.notes;
 
 import paul.wintz.music.intervals.IntervalEnum;
+import paul.wintz.utils.exceptions.UnhandledCaseException;
 
 public enum PitchClass {
 	//Flats are used because octothorpes, #'s, do not work.
-	//The names used here are only for identification, 
+	//The names used here are only for identification,
 	C, Db , D, Eb, E, F, Gb, G, Ab, A, Bb, B;
-	
+
 	private enum AccidentalType{
 		FLAT, SHARP;
 	}
-	
+
 	//Returns the number of half-steps above C.
 	public int getNoteNumber(){
 		return this.ordinal();
 	}
-	
+
 	public PitchClass addHalfsteps(int halfSteps){
 		int newNoteNumber = (this.getNoteNumber() + halfSteps) % 12;
-		while(newNoteNumber < 0) newNoteNumber += 12;
-		
+		while(newNoteNumber < 0) {
+			newNoteNumber += 12;
+		}
+
 		return PitchClass.values()[newNoteNumber];
 	}
 	public PitchClass addInterval(IntervalEnum intervalEnum){
 		return PitchClass.values()[(this.getNoteNumber() + intervalEnum.getHalfSteps()) % 12];
 	}
-	
+
 	public static PitchClass getFromMidiNumber(int midiNumber){
 		return PitchClass.values()[(60 + midiNumber) % 12];
 	}
-	
+
 	public static int getDifferneceInHalfSteps(PitchClass first, PitchClass second){
 		return getDifferneceInHalfSteps(first.getNoteNumber(), second.getNoteNumber());
 	}
-	
+
 	public static int getDifferneceInHalfSteps(int noteNumber1, int noteNumber2) {
 		return noteNumber2 - noteNumber1;
 	}
-	
-	public String getName(PitchClass pitchClass, AccidentalType accidentalPreference) throws Exception{
+
+	public String getName(PitchClass pitchClass, AccidentalType accidentalPreference){
 		switch(pitchClass){
 		case C:
 			return "C";
@@ -95,7 +98,7 @@ public enum PitchClass {
 		case B:
 			return "B";
 		}
-		
-		throw new Exception("Error in PitchClass.getName()");
+
+		throw new UnhandledCaseException(pitchClass);
 	}
 }

@@ -1,6 +1,12 @@
 package paul.wintz.music.chords;
 
-import paul.wintz.music.UnicodSymbol;
+import static paul.wintz.music.UnicodSymbol.*;
+import static paul.wintz.music.intervals.IntervalEnum.*;
+
+import java.util.List;
+
+import com.google.common.collect.ImmutableList;
+
 import paul.wintz.music.intervals.IntervalEnum;
 
 public enum ChordQuality {
@@ -9,20 +15,20 @@ public enum ChordQuality {
 	//	SUS_2 (IntervalQuality.NONE, IntervalQuality.PERFECT, null, null, IntervalQuality.MAJOR, null, " sus2"),
 	//	SUS_4 (IntervalQuality.NONE, IntervalQuality.PERFECT, null, null, null, IntervalQuality.PERFECT, " sus4"),
 
-	MINOR_TRIAD 		(" min", IntervalEnum.MINOR_THIRD, IntervalEnum.PERFECT_FIFTH),
-	DIMINISHED_TRIAD 	(UnicodSymbol.DIMINISHED, IntervalEnum.MINOR_THIRD, IntervalEnum.TRITONE),
-	MINOR_SEVENTH 		(" min7", IntervalEnum.MINOR_THIRD, IntervalEnum.PERFECT_FIFTH, IntervalEnum.MINOR_SEVENTH),
+	MINOR_TRIAD 		(" min", MINOR_THIRD, PERFECT_FIFTH),
+	DIMINISHED_TRIAD 	(DIMINISHED, MINOR_THIRD, TRITONE),
+	MINOR_7 			(" min7", MINOR_THIRD, PERFECT_FIFTH, MINOR_SEVENTH),
 
-	MAJOR_TRIAD 		(" maj", IntervalEnum.MAJOR_THIRD, IntervalEnum.PERFECT_FIFTH),
-	AUGMENTED_TRIAD 	("+", IntervalEnum.MAJOR_THIRD, IntervalEnum.AUGMENTED_FIFTH),
+	MAJOR_TRIAD 		(" maj", MAJOR_THIRD, PERFECT_FIFTH),
+	AUGMENTED_TRIAD 	("+", MAJOR_THIRD, AUGMENTED_FIFTH),
 
-	MAJOR_SEVENTH 		(" maj7", IntervalEnum.MAJOR_THIRD, IntervalEnum.PERFECT_FIFTH, IntervalEnum.MAJOR_SEVENTH),
-	DOMINANT_SEVENTH 	("7", IntervalEnum.MAJOR_THIRD, IntervalEnum.PERFECT_FIFTH, IntervalEnum.MINOR_SEVENTH),
-	DIMINISHED_SEVENTH 	(UnicodSymbol.DIMINISHED + "7", IntervalEnum.MINOR_THIRD, IntervalEnum.TRITONE, IntervalEnum.DIMINISHED_SEVENTH),
-	HALF_DIMINISHED_SEVENTH (UnicodSymbol.HALF_DIMINISHED + "7", IntervalEnum.MINOR_THIRD, IntervalEnum.TRITONE, IntervalEnum.MINOR_SEVENTH),
+	MAJOR_7 			(" maj7", MAJOR_THIRD, PERFECT_FIFTH, MAJOR_SEVENTH),
+	DOMINANT_7 			("7", MAJOR_THIRD, PERFECT_FIFTH, MINOR_SEVENTH),
+	DIMINISHED_7 		(DIMINISHED + "7", MINOR_THIRD, TRITONE, DIMINISHED_SEVENTH),
+	HALF_DIMINISHED_7	(HALF_DIMINISHED + "7", MINOR_THIRD, TRITONE, MINOR_SEVENTH),
 	INVALID ("?");
 
-	private final IntervalEnum[] intervalEnums;
+	private final List<IntervalEnum> intervalEnums;
 	//	final private IntervalEnum third;
 	//	final private IntervalEnum fifth;
 	//	final private IntervalEnum seventh;
@@ -34,10 +40,8 @@ public enum ChordQuality {
 	//Seventh chords
 	private ChordQuality(String sufix, IntervalEnum... intervals){
 		this.sufix = sufix;
-		this.intervalEnums = intervals;
+		this.intervalEnums = ImmutableList.copyOf(intervals);
 	}
-
-
 
 	//Triads
 
@@ -92,11 +96,8 @@ public enum ChordQuality {
 	//		this("invalid", IntervalQuality.NONE, IntervalQuality.NONE, IntervalQuality.NONE, IntervalQuality.NONE, IntervalQuality.NONE, IntervalQuality.NONE);
 	//	}
 
-	public IntervalEnum[] getIntervals(){
-		if(this == INVALID)
-			return null;
-		else
-			return intervalEnums;
+	public List<IntervalEnum> getIntervals(){
+		return intervalEnums;
 	}
 
 	//	@Deprecated
@@ -104,38 +105,38 @@ public enum ChordQuality {
 	//		if(this == INVALID) return null;
 	//
 	//		ArrayList<IntervalEnum> intervalEnums = new ArrayList<>();
-	//		intervalEnums.add(IntervalEnum.UNISON);
+	//		intervalEnums.add(UNISON);
 	//
 	//		switch (getThird()) {
 	//		case MAJOR_THIRD:
-	//			intervalEnums.add(IntervalEnum.MAJOR_THIRD);
+	//			intervalEnums.add(MAJOR_THIRD);
 	//			break;
 	//		case MINOR_THIRD:
-	//			intervalEnums.add(IntervalEnum.MINOR_THIRD);
+	//			intervalEnums.add(MINOR_THIRD);
 	//			break;
 	//		}
 	//		switch (getFifth()) {
 	//		case PERFECT_FIFTH:
-	//			intervalEnums.add(IntervalEnum.PERFECT_FIFTH);
+	//			intervalEnums.add(PERFECT_FIFTH);
 	//			break;
 	//		case TRITONE:
-	//			intervalEnums.add(IntervalEnum.TRITONE);
+	//			intervalEnums.add(TRITONE);
 	//			break;
 	//		case AUGMENTED_FIFTH:
-	//			intervalEnums.add(IntervalEnum.MINOR_SIXTH);
+	//			intervalEnums.add(MINOR_SIXTH);
 	//			break;
 	//		default:
 	//			System.err.println("Error in ChordQuality.getIntervals(). fifth: " + fifth.name() + " was not handled well");
 	//		}
 	//		switch (getSeventh()) {
-	//		case MAJOR_SEVENTH:
-	//			intervalEnums.add(IntervalEnum.MAJOR_SEVENTH);
+	//		case MAJOR_7:
+	//			intervalEnums.add(MAJOR_SEVENTH);
 	//			break;
-	//		case MINOR_SEVENTH:
-	//			intervalEnums.add(IntervalEnum.MINOR_SEVENTH);
+	//		case MINOR_7:
+	//			intervalEnums.add(MINOR_SEVENTH);
 	//			break;
-	//		case DIMINISHED_SEVENTH:
-	//			intervalEnums.add(IntervalEnum.MAJOR_SIXTH);
+	//		case DIMINISHED_7:
+	//			intervalEnums.add(MAJOR_SIXTH);
 	//			break;
 	//		case NONE:
 	//			break;
@@ -189,9 +190,9 @@ public enum ChordQuality {
 			IntervalEnum eleventhType,
 			IntervalEnum thirteenthType
 			){
-		//		if(thirdType == IntervalEnum.MULTIPLE
-		//				|| fifthType == IntervalEnum.MULTIPLE
-		//				|| seventhType == IntervalEnum.MULTIPLE) return INVALID;
+		//		if(thirdType == MULTIPLE
+		//				|| fifthType == MULTIPLE
+		//				|| seventhType == MULTIPLE) return INVALID;
 
 		switch (thirdType) {
 		case MINOR_THIRD:
@@ -202,21 +203,21 @@ public enum ChordQuality {
 				case NULL:
 					return ChordQuality.MINOR_TRIAD;
 				case MINOR_SEVENTH:
-					return ChordQuality.MINOR_SEVENTH;
-					//				case MAJOR_SEVENTH:
+					return ChordQuality.MINOR_7;
+					//				case MAJOR_7:
 					//					return ChordQuality.MINOR_MAJOR_SEVENTH;
 				}
 				break;
 			case TRITONE:
 				switch(seventhType){
 				case NULL:
-					if(thirteenthType == IntervalEnum.MAJOR_THIRTEENTH)
-						return ChordQuality.DIMINISHED_SEVENTH;
+					if(thirteenthType == MAJOR_THIRTEENTH)
+						return ChordQuality.DIMINISHED_7;
 					return ChordQuality.DIMINISHED_TRIAD;
 				case MINOR_SEVENTH:
-					return ChordQuality.HALF_DIMINISHED_SEVENTH;
+					return ChordQuality.HALF_DIMINISHED_7;
 				case DIMINISHED_SEVENTH:
-					return ChordQuality.DIMINISHED_SEVENTH;
+					return ChordQuality.DIMINISHED_7;
 				}
 				break;
 			}
@@ -225,7 +226,7 @@ public enum ChordQuality {
 		case MAJOR_THIRD:
 			switch(fifthType){
 			case NULL: //If there is no fifth, assume it is perfect.
-				if(thirteenthType == IntervalEnum.MINOR_THIRTEENTH)
+				if(thirteenthType == MINOR_THIRTEENTH)
 					return ChordQuality.AUGMENTED_TRIAD;
 				break;
 			case PERFECT_FIFTH:
@@ -233,9 +234,9 @@ public enum ChordQuality {
 				case NULL:
 					return ChordQuality.MAJOR_TRIAD;
 				case MAJOR_SEVENTH:
-					return ChordQuality.MAJOR_SEVENTH;
+					return ChordQuality.MAJOR_7;
 				case MINOR_SEVENTH:
-					return ChordQuality.DOMINANT_SEVENTH;
+					return ChordQuality.DOMINANT_7;
 				}
 				break;
 			case AUGMENTED_FIFTH:
@@ -245,7 +246,7 @@ public enum ChordQuality {
 		case NULL:
 			switch(fifthType){
 			case PERFECT_FIFTH:
-				//				if(ninthType == IntervalEnum.MAJOR_THIRD){
+				//				if(ninthType == MAJOR_THIRD){
 				//					return SUS_2;
 				//				} else if(eleventhType == IntervalQuality.PERFECT){
 				//					return SUS_4;
@@ -260,7 +261,7 @@ public enum ChordQuality {
 	@SuppressWarnings("incomplete-switch")
 	/*public static ChordQuality calculate(IntervalEnum... stackedThirds){
 		for(IntervalEnum interval : stackedThirds){
-			if(interval == null || interval == IntervalEnum.MULTIPLE){
+			if(interval == null || interval == MULTIPLE){
 				return ChordQuality.INVALID;
 			}
 		}
@@ -282,7 +283,7 @@ public enum ChordQuality {
 				case NONE:
 					return ChordQuality.MINOR_TRIAD;
 				case MINOR:
-					return ChordQuality.MINOR_SEVENTH;
+					return ChordQuality.MINOR_7;
 				}
 				break;
 			case DIMINISHED:
@@ -290,9 +291,9 @@ public enum ChordQuality {
 				case NONE:
 					return ChordQuality.DIMINISHED_TRIAD;
 				case MINOR:
-					return ChordQuality.HALF_DIMINISHED_SEVENTH;
+					return ChordQuality.HALF_DIMINISHED_7;
 				case DIMINISHED:
-					return ChordQuality.DIMINISHED_SEVENTH;
+					return ChordQuality.DIMINISHED_7;
 				}
 				break;
 			}
@@ -306,9 +307,9 @@ public enum ChordQuality {
 				case NONE:
 					return ChordQuality.MAJOR_TRIAD;
 				case MAJOR:
-					return ChordQuality.MAJOR_SEVENTH;
+					return ChordQuality.MAJOR_7;
 				case MINOR:
-					return ChordQuality.DOMINANT_SEVENTH;
+					return ChordQuality.DOMINANT_7;
 				}
 				break;
 			case AUGMENTED:
@@ -322,7 +323,7 @@ public enum ChordQuality {
 		case null:
 			switch(fifth){
 			case PERFECT_FIFTH:
-//				if(ninthType == IntervalEnum.MAJOR_THIRD){
+//				if(ninthType == MAJOR_THIRD){
 //					return SUS_2;
 //				} else if(eleventhType == IntervalQuality.PERFECT){
 //					return SUS_4;
@@ -399,8 +400,8 @@ public enum ChordQuality {
 	 * @return
 	 */
 	private IntervalEnum getStackedThird(int index) {
-		if(intervalEnums == null || intervalEnums.length < index) return null;
-		return intervalEnums[index];
+		if(intervalEnums.size() <= index) return null;
+		return intervalEnums.get(index);
 	}
 
 

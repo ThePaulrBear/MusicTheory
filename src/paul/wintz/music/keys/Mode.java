@@ -44,10 +44,8 @@ public enum Mode {
 		return solfegeEnum[deg.ordinal()].getHalfstepsAboveTonic();
 	}
 
-	//Calculations
-	//Check each
-	ArrayList<RomanNumeral> getMatchingRelativeChords(PitchClass tonic, AbsoluteChord chordToMatch){
-		ArrayList<RomanNumeral> matchingChords = new ArrayList<>();
+	List<RomanNumeral> getMatchingRelativeChords(PitchClass tonic, AbsoluteChord chordToMatch){
+		List<RomanNumeral> matchingChords = new ArrayList<>();
 
 		int targetHalfStepsAboveTonic = PitchClass.getDifferneceInHalfSteps(tonic, chordToMatch.getRoot());
 
