@@ -62,9 +62,6 @@ public enum Mode {
 				matchingChords.add(chordToCheck);
 			}
 
-			if(chordToCheck.quality.isSeventhChord()){
-
-			}
 		}
 		return matchingChords;
 	}

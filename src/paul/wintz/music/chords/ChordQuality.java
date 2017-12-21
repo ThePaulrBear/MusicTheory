@@ -36,23 +36,11 @@ public enum ChordQuality {
 	//Seventh chords
 	private ChordQuality(String sufix, IntervalEnum... intervals){
 		this.sufix = sufix;
-		this.intervalEnums = ImmutableSet.copyOf(intervals);
+		this.intervalEnums = ImmutableSortedSet.copyOf(intervals); // Use a sorted set for optimization.
 	}
 
 	public Set<IntervalEnum> getIntervals(){
 		return intervalEnums;
-	}
-
-	public static ChordQuality calculate(IntervalEnum... intervals){
-		return IntervalsToChordQualityMapper.chordQualityFromIntervalSet(intervals);
-	}
-
-	boolean isTriad(){
-		return getThird().isPresent() && getFifth().isPresent();
-	}
-
-	public boolean isSeventhChord(){
-		return getSeventh().isPresent();
 	}
 
 	public Optional<IntervalEnum> getThird() {
@@ -84,6 +72,21 @@ public enum ChordQuality {
 				.filter(interval -> interval.getScaleSteps() == scaleDegree).findFirst();
 	}
 
+	public boolean hasSeventh(){
+		return getSeventh().isPresent();
+	}
+
+	public boolean hasNinth(){
+		return getSeventh().isPresent();
+	}
+
+	public boolean hasEleventh(){
+		return getEleventh().isPresent();
+	}
+
+	public boolean hasThirteenth(){
+		return getThirteenth().isPresent();
+	}
 
 	public String getSufix() {
 		return sufix;

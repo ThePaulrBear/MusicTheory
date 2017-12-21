@@ -4,7 +4,7 @@ public abstract class Chord {
 	public ChordQuality quality;
 
 	public boolean isSeventhChord(){
-		return quality.isSeventhChord();
+		return quality.hasSeventh();
 	}
 
 	public static boolean isSameQuality(Chord chord1, Chord chord2){

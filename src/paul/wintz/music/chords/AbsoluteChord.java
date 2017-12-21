@@ -68,7 +68,7 @@ public class AbsoluteChord extends Chord {
 			IntervalEnum[] a = new IntervalEnum[intervalEnums.size()];
 			intervalEnums.toArray(a);
 
-			quality = ChordQuality.calculate(a);
+			quality = IntervalsToChordQualityMapper.chordQualityFromIntervalSet(a);
 
 			if(quality.isValid()) {
 				break;
