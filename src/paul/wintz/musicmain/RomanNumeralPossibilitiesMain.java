@@ -18,29 +18,4 @@ public class RomanNumeralPossibilitiesMain {
 		}
 	}
 
-	public static void test(){
-		//		for (ChordQuality qual : ChordQuality.values()) {
-		//			AbsoluteChord chordToMatch = new AbsoluteChord(PitchClass.C, qual);//= chordRelative.calculateChord(PitchClass.C);
-		//
-		//			System.out.print("\n" + chordToMatch.toString() + "\n");
-		//			for (PitchClass tonicOfKey : PitchClass.values()) {
-		//
-		//				for (Mode mode : values()) {
-		//					ArrayList<RomanNumeral> matchingChords = mode.getMatchingRelativeChords(tonicOfKey,
-		//							chordToMatch);
-		//					if (matchingChords.isEmpty())
-		//						continue;
-		//					System.out.print("\t" + tonicOfKey.name() + " " + mode.toString() + ": ");
-		//					for (RomanNumeral matchingChord : matchingChords) {
-		//						System.out.print(matchingChord.toString());
-		//					}
-		//					System.out.println();
-		//				}
-		//			}
-		//		}
-
-		paul.wintz.musicmain.ChordProgressionGeneratorMain.produceProgression();
-	}
-
-
 }

@@ -1,5 +1,7 @@
 package paul.wintz.music.keys;
 
+import static paul.wintz.music.keys.Solfege.*;
+
 import java.util.*;
 
 import paul.wintz.music.chords.*;
@@ -8,28 +10,15 @@ import paul.wintz.music.notes.*;
 public enum Mode {
 	MAJOR (
 			RomanNumeral.Major.MAJOR,
-			Solfege.DO,
-			Solfege.RE,
-			Solfege.MI,
-			Solfege.FA,
-			Solfege.SOL,
-			Solfege.LA,
-			Solfege.TI
-			),
+			DO, RE, MI, FA, SOL, LA, TI),
 	MINOR (
 			RomanNumeral.Minor.MINOR,
-			Solfege.DO,
-			Solfege.RE,
-			Solfege.MI,
-			Solfege.FA,
-			Solfege.SOL,
-			Solfege.LE,
-			Solfege.TE);
+			DO, RE, ME, FA, SOL, LE, TE);
 
 	private final Solfege[] solfege;
 	private final RomanNumeral[] relativeChords;
 
-	Mode (RomanNumeral[] diatonicQualities, Solfege... solfege){
+	private Mode(RomanNumeral[] diatonicQualities, Solfege... solfege){
 		this.solfege = solfege;
 		this.relativeChords = diatonicQualities;
 	}

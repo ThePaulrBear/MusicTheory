@@ -3,7 +3,10 @@ package paul.wintz.music.keys;
 import static com.google.common.base.Preconditions.checkArgument;
 import static paul.wintz.music.intervals.IntervalEnum.MAJOR_THIRD;
 
+import java.util.Optional;
+
 import paul.wintz.music.chords.ChordQuality;
+import paul.wintz.music.intervals.IntervalEnum;
 
 public enum ScaleDegree {
 	TONIC ("I"),
@@ -35,16 +38,17 @@ public enum ScaleDegree {
 	public String getRomanNumeral(ChordQuality quality) {
 		checkArgument(quality.isValid(), "Invalid Chord Quality");
 
-		String s = this.romanNumeral;
+		String romanNumeral = this.romanNumeral;
 
-		if (quality.getThird() == MAJOR_THIRD) {
-			s = s.toUpperCase();
+		Optional<IntervalEnum> third = quality.getThird();
+		if (third.isPresent() && third.get() == MAJOR_THIRD) {
+			romanNumeral = romanNumeral.toUpperCase();
 		} else {
-			s = s.toLowerCase();
+			romanNumeral = romanNumeral.toLowerCase();
 		}
 
-		s += quality.getSufix();
+		romanNumeral += quality.getSufix();
 
-		return s;
+		return romanNumeral;
 	}
 }

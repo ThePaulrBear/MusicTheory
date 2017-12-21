@@ -32,7 +32,7 @@ public class MidiAnalyzerMain {
 	}
 
 
-	static class MidiChordAnalyzer implements Runnable {
+	public static class MidiChordAnalyzer implements Runnable {
 
 		private Synthesizer synth;
 

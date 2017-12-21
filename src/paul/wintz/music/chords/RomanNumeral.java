@@ -164,7 +164,7 @@ public class RomanNumeral extends Chord {
 							VII7 = new RomanNumeral(TE, DOMINANT_7, NATURAL_MINOR, "VII7"),
 
 							//Harmonic Minor.
-							IIIAug = new RomanNumeral(ME, AUGMENTED_TRIAD, HARMONIC_MINOR, "III+"),
+							IIIAug = new RomanNumeral(ME, AUGMENTED, HARMONIC_MINOR, "III+"),
 							V = new RomanNumeral(SOL, MAJOR_TRIAD, HARMONIC_MINOR, "V"),
 							viiDim = new RomanNumeral(TI, DIMINISHED_TRIAD, HARMONIC_MINOR, "vii" + DIMINISHED),
 							V7 = new RomanNumeral(SOL, DOMINANT_7, HARMONIC_MINOR, "V7"),
