@@ -79,20 +79,20 @@ public class ChordProgressionGeneratorMain {
 	}
 
 	public static void produceProgression() throws InterruptedException {
-		String progressionString = "\n";
+
 		Key key = Key.getKey(PitchClass.C, Mode.MAJOR);
 		RomanNumeral romanNumeral = RomanNumeral.makeRomanNumeral(Mode.MAJOR, 0, ChordQuality.MAJOR_TRIAD);
 		AbsoluteChord absoluteChord = key.absoluteChordFromRomanNumeral(romanNumeral);
 
 		List<RomanNumeral> matchingChords = new ArrayList<>();
 		List<Key> matchingKeys = new ArrayList<>();
-		progressionString += key + ": ";
+		System.out.println(key + ": ");
 		for(int i = 0; i < 50; i++){
 
 			matchingChords.clear();
 			matchingKeys.clear();
 
-			progressionString += "[" + romanNumeral + " | ";
+			System.out.println("[" + romanNumeral + " | ");
 			//String format: [I | C MAJOR: IV]
 			for(Key keyToCheck: Key.getAllKeys()){
 
@@ -114,7 +114,7 @@ public class ChordProgressionGeneratorMain {
 			}
 			romanNumeral = matchingChords.get(index);
 			key = matchingKeys.get(index);
-			progressionString += "\n" + key + ": " + romanNumeral + "] (" + absoluteChord + ")\n";
+			System.out.println(key + ": " + romanNumeral + "] (" + absoluteChord + ")");
 
 			for(int n = 0; n  < 10; n++){
 				try{
@@ -123,13 +123,12 @@ public class ChordProgressionGeneratorMain {
 					continue;
 				}
 				absoluteChord = key.absoluteChordFromRomanNumeral(romanNumeral);
-				progressionString += "\t " + romanNumeral + " (" + absoluteChord + ")\n";
+				System.out.println("\t " + romanNumeral + " (" + absoluteChord + ")");
 
 				playChord(absoluteChord);
 				Thread.sleep(1000);
 				stopNotes();
 				Thread.sleep(300);
-				System.out.print(progressionString);
 			}
 
 		}
