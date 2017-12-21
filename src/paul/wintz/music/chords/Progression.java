@@ -15,12 +15,21 @@ public class Progression {
 	private AbsoluteChord previousChord;
 
 	public void add(List<PitchClass> notes) {
-		if(sameNotesAsPreviousFrame(notes)) return;
+		if(sameNotesAsPreviousFrame(notes)) {
+			System.out.print(".");
+			return;
+		} else if(notes.isEmpty()) {
+			System.out.print("_");
+			return;
+		} else {
+			System.out.println();
+		}
 		previousNotes.clear();
 		previousNotes.addAll(notes);
 
 		// Not enough notes to be a triad.
-		if(notes.size() < 3) {
+		boolean notAChord = notes.size() < 3;
+		if(notAChord) {
 			out.println("\t " + notes);
 			return;
 		}
@@ -101,38 +110,16 @@ public class Progression {
 		//If there were no chords, then the key will not be found.
 		if(chordsInProgression.isEmpty()) return;
 
-		List<PossibleKey> possibleKeys = new ArrayList<>();
-		List<PossibleKey> matchingKeys = new ArrayList<>();
+		Set<PossibleKey> possibleKeys = new HashSet<>();
 
 		int finalIndex = chordsInProgression.size() - 1;
 		int i = finalIndex;
 
-		for(Key key : Key.getAllKeys()){
-			//try to create Roman numeral
-			RomanNumeral rn = key.romanNumeralFromAbsoluteChord(chordsInProgression.get(i));
-
-			//If Roman numeral was not found skip to next key.
-			if(rn == null) {
-				continue;
-			}
-
-			//If Roman numeral was found, add this key to list of possible keys.
-			possibleKeys.add(new PossibleKey(key, rn));
-		}
+		possibleKeys.addAll(possibleKeysFromChord(chordsInProgression.get(finalIndex)));
 
 		while(i > 0){
-			//out.printf("[%d]: possible keys = %d\n", i, possibleKeys.size());
 			i--;
-			matchingKeys.clear();
-
-			for(PossibleKey key : possibleKeys){
-				RomanNumeral rn = key.getKey().romanNumeralFromAbsoluteChord(chordsInProgression.get(i));
-				if(rn == null) {
-					continue;
-				}
-
-				matchingKeys.add(new PossibleKey(key.getKey(), rn));
-			}
+			Set<PossibleKey> matchingKeys = matchingKeys(possibleKeys, chordsInProgression.get(i));
 
 			if(matchingKeys.isEmpty()){
 				//If no keys were found, then preserve possibleKey's reference to the previous array.
@@ -141,23 +128,16 @@ public class Progression {
 				possibleKeys = matchingKeys;
 			}
 
-			//out.printf("Before: possible keys = %d\n",possibleKeys.size());
 			//find the least chromatic type of key
-			int minPrecedence = Integer.MAX_VALUE;
-			for(PossibleKey key : possibleKeys){
-				if(key.getPrecedence() < minPrecedence) {
-					minPrecedence = key.getPrecedence();
-				}
-			}
+			int minPrecedence = minPrecedence(possibleKeys);
 
 			//Remove any keys that are more chromatic than the least chromatic
-			for(int n = 0; n < possibleKeys.size(); n++){
-				if(possibleKeys.get(n).getPrecedence() > minPrecedence) {
-					possibleKeys.remove(n);
+			for(PossibleKey possible : possibleKeys){
+				if(possible.getPrecedence() > minPrecedence) {
+					possibleKeys.remove(possible);
 				}
 			}
 
-			//out.printf("After: possible keys = %d\n",possibleKeys.size());
 
 			//If there is only one remaining candidate...
 			if(possibleKeys.size() == 1) {
@@ -179,6 +159,46 @@ public class Progression {
 		}
 		out.println("\t" + line1 + "\n\t" + line2 + "\n");
 
+	}
+
+	private int minPrecedence(Set<PossibleKey> possibleKeys) {
+		int minPrecedence = Integer.MAX_VALUE;
+		for(PossibleKey key : possibleKeys){
+			if(key.getPrecedence() < minPrecedence) {
+				minPrecedence = key.getPrecedence();
+			}
+		}
+		return minPrecedence;
+	}
+
+	private Set<PossibleKey> matchingKeys(Collection<PossibleKey> possibleKeys, AbsoluteChord chord) {
+		Set<PossibleKey> matchingKeys = new HashSet<>();
+		for(PossibleKey key : possibleKeys){
+			RomanNumeral rn = key.getKey().romanNumeralFromAbsoluteChord(chord);
+			if(rn == null) {
+				continue;
+			}
+
+			matchingKeys.add(new PossibleKey(key.getKey(), rn));
+		}
+		return matchingKeys;
+	}
+
+	private Set<PossibleKey> possibleKeysFromChord(AbsoluteChord chordInProgression) {
+		Set<PossibleKey> keys = new HashSet<>();
+		for(Key key : Key.getAllKeys()){
+			//try to create Roman numeral
+			RomanNumeral rn = key.romanNumeralFromAbsoluteChord(chordInProgression);
+
+			//If Roman numeral was not found skip to next key.
+			if(rn == null) {
+				continue;
+			}
+
+			//If Roman numeral was found, add this key to list of possible keys.
+			keys.add(new PossibleKey(key, rn));
+		}
+		return keys;
 	}
 
 	/**
